@@ -1,0 +1,29 @@
+# github node project defaults
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+pids
+*.pid
+*.seed
+*.pid.lock
+lib-cov
+coverage
+*.lcov
+.nyc_output
+build/Release
+node_modules/
+jspm_packages/
+*.tsbuildinfo
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.env
+.env.test
+.cache
+dist
+# ---
+!.vscode/settings.json
