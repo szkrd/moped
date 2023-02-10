@@ -1,22 +1,17 @@
 import { Express } from 'express';
 import { MpdCommand } from '../models/mpdCommand';
 import { mpd } from '../modules/mpd';
-import { catchMpdError } from '../utils/error';
+import { catchMpdError, thenSuccess } from '../utils/http';
 import { SchemaType, toSchema } from '../utils/schema';
 
 function GET_clearError(app: Express, path: string) {
-  return app.get(path, async (req, res) => {
-    mpd
-      .sendCommand(MpdCommand.ClearError)
-      .then(() => {
-        res.json({ success: true });
-      })
-      .catch(catchMpdError(res));
+  return app.get(path, (req, res) => {
+    mpd.sendCommand(MpdCommand.ClearError).then(thenSuccess(res)).catch(catchMpdError(res));
   });
 }
 
 function GET_currentSong(app: Express, path: string) {
-  return app.get(path, async (req, res) => {
+  return app.get(path, (req, res) => {
     mpd
       .sendCommand(MpdCommand.CurrentSong)
       .then((resp) => {
@@ -31,7 +26,7 @@ function GET_currentSong(app: Express, path: string) {
 }
 
 function GET_status(app: Express, path: string) {
-  return app.get(path, async (req, res) => {
+  return app.get(path, (req, res) => {
     mpd
       .sendCommand(MpdCommand.Status)
       .then((resp) => {
@@ -62,7 +57,7 @@ function GET_status(app: Express, path: string) {
 }
 
 function GET_stats(app: Express, path: string) {
-  return app.get(path, async (req, res) => {
+  return app.get(path, (req, res) => {
     mpd
       .sendCommand(MpdCommand.Stats)
       .then((resp) => {

@@ -1,6 +1,6 @@
 # moped
 
-- a **work in progress** mpd http/rest/socket server
+- a **work in progress** mpd http/SSE/socket server
 - so far: it's just a mess of spaghetti code
 
 ## protocol support
@@ -16,43 +16,133 @@
 ## command support
 
 - [ ] Querying MPD’s status
-  - [x] clearerror: **GET** `/status/clear-error`
-  - [x] currentsong: **GET** `/status/current-song`
+  - [x] clearerror: `/status/clear-error`
+  - [x] currentsong: `/status/current-song`
   - [ ] idle (subsystem change listener)
-  - [x] status: **GET** `/status/status`
-  - [x] stats: **GET** `/status/stats`
-- [ ] Playback options
-  - [ ] consume
-  - [ ] crossfade
-  - [ ] mixrampdb
-  - [ ] mixrampdelay
-  - [ ] random
-  - [ ] repeat
-  - [x] getvol: **GET** `/playback-options/volume`
-  - [ ] setvol
-  - [ ] single
-  - [ ] replay_gain_mode
-  - [ ] replay_gain_status
+  - [x] status: `/status/status`
+  - [x] stats: `/status/stats`
+- [x] Playback options
+  - [x] consume: `/playback-options/consume`?`state=true|false|oneshot`
+  - [x] crossfade: `/playback-options/crossfade`?`seconds=number`
+  - [x] mixrampdb: `/playback-options/mixramp-db`?`decibels=number`
+  - [x] mixrampdelay: `/playback-options/mixramp-delay`?`seconds=number`
+  - [x] random: `/playback-options/random`?`state=true|false`
+  - [x] repeat: `/playback-options/repeat`?`state=true|false`
+  - [x] getvol: `/playback-options/volume`
+  - [x] setvol: `/playback-options/volume`?`vol=percent`
+  - [x] single: `/playback-options/single`?`state=true|false|oneshot`
+  - [x] replay_gain_mode: `/playback-options/replay-gain-mode`?`mode=off|track|album|auto`
+  - [x] replay_gain_status: `/playback-options/replay-gain-status`
 - [ ] Controlling playback
-  - [x] next: **GET** `/controlling-playback/next`
-  - [ ] pause {state}
-  - [ ] play {songPos}
-  - [ ] playid {songId}
-  - [x] previous: **GET** `/controlling-playback/previous`
-  - [ ] seek {songPos} {time}
-  - [ ] seekId {songId} {time}
-  - [ ] seekCur {time}
-  - [x] stop: **GET** `/controlling-playback/stop`
+  - [x] next: `/controlling-playback/next`
+  - [ ] pause
+  - [ ] play
+  - [ ] playid
+  - [x] previous: `/controlling-playback/previous`
+  - [ ] seek
+  - [ ] seekId
+  - [ ] seekCur
+  - [x] stop: `/controlling-playback/stop`
 - [ ] The Queue
+  - [ ] add
+  - [ ] addid
+  - [ ] clear
+  - [ ] delete
+  - [ ] deleteid
+  - [ ] move
+  - [ ] moveid
+  - [ ] playlist
+  - [ ] playlistfind
+  - [ ] playlistid
+  - [ ] playlistinfo
+  - [ ] playlistsearch
+  - [ ] plchanges
+  - [ ] plchangesposid
+  - [ ] prio
+  - [ ] prioid
+  - [ ] rangeid
+  - [ ] shuffle
+  - [ ] swap
+  - [ ] swapid
+  - [ ] addtagid
+  - [ ] cleartagid
 - [ ] Stored playlists
+  - [ ] listplaylist
+  - [ ] listplaylistinfo
+  - [ ] listplaylists
+  - [ ] load
+  - [ ] playlistadd
+  - [ ] playlistclear
+  - [ ] playlistdelete
+  - [ ] playlistmove
+  - [ ] rename
+  - [ ] rm
+  - [ ] save
 - [ ] The music database
+  - [ ] albumart
+  - [ ] count
+  - [ ] getfingerprint
+  - [ ] find
+  - [ ] findadd
+  - [ ] list
+  - [ ] listall
+  - [ ] listallinfo
+  - [ ] listfiles
+  - [ ] lsinfo
+  - [ ] readcomments
+  - [ ] readpicture
+  - [ ] search
+  - [ ] searchadd
+  - [ ] searchaddpl
+  - [ ] searchcount
+  - [ ] update
+  - [ ] rescan
 - [ ] Mounts and neighbors
+  - [ ] mount
+  - [ ] unmount
+  - [ ] listmounts
+  - [ ] listneighbors
 - [ ] Stickers
+  - [ ] sticker get
+  - [ ] sticker set
+  - [ ] sticker delete
+  - [ ] sticker list
+  - [ ] sticker find
 - [ ] Connection settings
+  - [ ] close
+  - [ ] kill
+  - [ ] password
+  - [ ] ping
+  - [ ] binarylimit
+  - [ ] tagtypes
+  - [ ] tagtypes disable
+  - [ ] tagtypes enable
+  - [ ] tagtypes clear
+  - [ ] tagtypes all
 - [ ] Partition commands
+  - [ ] partition
+  - [ ] listpartitions
+  - [ ] newpartition
+  - [ ] delpartition
+  - [ ] moveoutput
 - [ ] Audio output devices
+  - [ ] disableoutput
+  - [ ] enableoutput
+  - [ ] toggleoutput
+  - [ ] outputs
+  - [ ] outputset
 - [ ] Reflection
-- [ ] Client to clien
+  - [ ] config
+  - [ ] commands
+  - [ ] notcommands
+  - [ ] urlhandlers
+  - [ ] decoders
+- [ ] Client to client
+  - [ ] subscribe
+  - [ ] unsubscribe
+  - [ ] channels
+  - [ ] readmessages
+  - [ ] sendmessage
 
 ## notes about responses
 
