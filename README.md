@@ -13,6 +13,47 @@
 - [ ] command lists
 - [ ] filters
 
+## command support
+
+- [ ] Querying MPD’s status
+  - [x] clearerror: **GET** `/status/clear-error`
+  - [x] currentsong: **GET** `/status/current-song`
+  - [ ] idle (subsystem change listener)
+  - [x] status: **GET** `/status/status`
+  - [x] stats: **GET** `/status/stats`
+- [ ] Playback options
+  - [ ] consume
+  - [ ] crossfade
+  - [ ] mixrampdb
+  - [ ] mixrampdelay
+  - [ ] random
+  - [ ] repeat
+  - [x] getvol: **GET** `/playback-options/volume`
+  - [ ] setvol
+  - [ ] single
+  - [ ] replay_gain_mode
+  - [ ] replay_gain_status
+- [ ] Controlling playback
+  - [x] next: **GET** `/controlling-playback/next`
+  - [ ] pause {state}
+  - [ ] play {songPos}
+  - [ ] playid {songId}
+  - [x] previous: **GET** `/controlling-playback/previous`
+  - [ ] seek {songPos} {time}
+  - [ ] seekId {songId} {time}
+  - [ ] seekCur {time}
+  - [x] stop: **GET** `/controlling-playback/stop`
+- [ ] The Queue
+- [ ] Stored playlists
+- [ ] The music database
+- [ ] Mounts and neighbors
+- [ ] Stickers
+- [ ] Connection settings
+- [ ] Partition commands
+- [ ] Audio output devices
+- [ ] Reflection
+- [ ] Client to clien
+
 ## notes about responses
 
 - response keys are camelcased (in mpd it's all lowercase, except for song metadata, which is part of the audio file)

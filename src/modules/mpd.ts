@@ -2,7 +2,7 @@
 import { createConnection, Socket } from 'node:net';
 import { MpdCommand } from '../models/mpdCommand';
 import { IMpdError } from '../models/mpdResponse/error';
-import { parseMpdError } from '../utils/mpd';
+import { normalizeVersion, parseMpdError } from '../utils/mpd';
 import { config } from './config';
 import { log } from './log';
 
@@ -40,6 +40,10 @@ let socket: Socket;
 let mpdVersion = '';
 let messageQueue: IQueuedMessage[] = [];
 let heartBeat = 0;
+
+function isMinVer(ver: string) {
+  return normalizeVersion(mpdVersion) >= normalizeVersion(ver);
+}
 
 function receive(data: string) {
   let processed = false;
@@ -201,6 +205,7 @@ function ping() {
 }
 
 export const mpd = {
+  isMinVer,
   connect,
   ping,
   disconnect,

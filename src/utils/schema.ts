@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { parseBoolean, parseBooleanOrOneshot } from './boolean';
+import { parseKeyValueMessage } from './mpd';
 import { parseIntSafe } from './number';
 import { objectKeys } from './typescript';
 
@@ -12,7 +13,8 @@ export enum SchemaType {
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 const noopConverter = (val: any, fallback: any) => val;
 
-export function toSchema<T>(obj: Record<string, string>, schema: Record<SchemaType | string, '*' | string[]>) {
+export function toSchema<T>(obj: Record<string, string> | string, schema: Record<SchemaType | string, '*' | string[]>) {
+  if (typeof obj === 'string') obj = parseKeyValueMessage(obj);
   const ret = { ...obj };
   objectKeys(schema).forEach((sKey) => {
     let val = schema[sKey];

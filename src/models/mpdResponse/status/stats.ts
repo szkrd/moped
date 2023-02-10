@@ -1,3 +1,4 @@
+import { parseKeyValueMessage } from '../../../utils/mpd';
 import { SchemaType, toSchema } from '../../../utils/schema';
 
 export interface IMpdStats {
@@ -17,7 +18,8 @@ export interface IMpdStats {
   playtime: number;
 }
 
-export function toMpdStats(obj: Record<string, string>) {
+export function toMpdStats(text: string) {
+  const obj = parseKeyValueMessage(text);
   return toSchema<IMpdStats>(obj, {
     [SchemaType.Number]: '*',
   });

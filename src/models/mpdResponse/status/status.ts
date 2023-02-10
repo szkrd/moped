@@ -1,3 +1,4 @@
+import { parseKeyValueMessage } from '../../../utils/mpd';
 import { SchemaType, toSchema } from '../../../utils/schema';
 
 export interface IMpdStatus {
@@ -56,7 +57,8 @@ export interface IMpdStatus {
   error?: string;
 }
 
-export function toMpdStatus(obj: Record<string, string>) {
+export function toMpdStatus(text: string) {
+  const obj = parseKeyValueMessage(text);
   return toSchema<IMpdStatus>(obj, {
     [SchemaType.Number]: [
       'volume',

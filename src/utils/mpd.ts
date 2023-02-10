@@ -79,6 +79,13 @@ export function parseMpdError(text: string): IMpdError {
   };
 }
 
+export function normalizeVersion(ver: string) {
+  const parts = ver.split('.');
+  if (parts.length === 1) parts.push('0');
+  if (parts.length === 2) parts.push('0');
+  return parseInt(parts.map((val) => val.padStart(3, '0')).join(''), 10);
+}
+
 // taken from mpd package
 function parseArrayMessage(text: string) {
   const results: Record<string, string>[] = [];

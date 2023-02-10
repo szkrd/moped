@@ -1,3 +1,4 @@
+import { parseKeyValueMessage } from '../../../utils/mpd';
 import { SchemaType, toSchema } from '../../../utils/schema';
 
 /**
@@ -67,7 +68,8 @@ export interface IMpdCurrentSong extends Record<string, string | number | undefi
   name?: string;
 }
 
-export function toMpdCurrentSong(obj: Record<string, string>) {
+export function toMpdCurrentSong(text: string) {
+  const obj = parseKeyValueMessage(text);
   return toSchema<IMpdCurrentSong>(obj, {
     [SchemaType.Number]: ['id', 'pos', 'time', 'duration', 'track', 'disc'],
   });
