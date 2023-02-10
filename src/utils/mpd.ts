@@ -1,6 +1,29 @@
-import { camelCase } from './string';
+import { Ack, IMpdError } from '../models/mpdResponse/error';
+import { parseIntSafe } from './number';
+import { camelCase, split } from './string';
 
-const camelables = ['playlistLength', 'mixrampDb', 'nextSongId', 'nextSong', 'songId', 'mixrampDelay'];
+const camelables = [
+  'playlistLength',
+  'mixrampDb',
+  'nextSongId',
+  'nextSong',
+  'songId',
+  'mixrampDelay',
+  'artistSort',
+  'albumSort',
+  'albumArtist',
+  'albumArtistSort',
+  'titleSort',
+  'originalDate',
+  'composerSort',
+  'movementNumber',
+  'artistId',
+  'albumId',
+  'albumArtistId',
+  'trackId',
+  'releaseTrackId',
+  'workId',
+];
 const lowCamelables = camelables.map((text) => text.toLowerCase());
 
 export function parseKeyValueMessage(text: string) {
@@ -19,6 +42,41 @@ export function parseKeyValueMessage(text: string) {
     if (cameled !== keyPart) delete acc[keyPart]; // remove the old key if we changed it
     return acc;
   }, {} as Record<string, string>);
+}
+
+export function parseMpdError(text: string): IMpdError {
+  const rawMessage = text;
+  let messageText = text;
+  let currentCommand = '';
+  let error = Ack.Unknown;
+  let commandListNum = 0;
+  if (text.startsWith('ACK ')) {
+    // 1: [error@command_listNum
+    // 2: {current_command} message_text
+    const parts = split(text.replace(/^ACK /, ''), '] ');
+    if (parts.length === 2) {
+      const left = parts[0].replace(/^\[/, '');
+      const right = parts[1];
+      const currentAndMsg = split(right, '} '); // 1: {current_command 2: message_text
+      const ackAndCmdList = split(left, '@'); // 1: error 2: command_listNum
+      if (ackAndCmdList.length === 2) {
+        const [ackPart, cmdListNumPart] = ackAndCmdList;
+        error = parseIntSafe(ackPart, -1);
+        commandListNum = parseIntSafe(cmdListNumPart, -1);
+      }
+      if (currentAndMsg.length === 2) {
+        currentCommand = currentAndMsg[0].replace(/^\{/, '');
+        messageText = currentAndMsg[1].replace(/\n+$/, '');
+      }
+    }
+  }
+  return {
+    error,
+    commandListNum,
+    currentCommand,
+    messageText,
+    rawMessage,
+  };
 }
 
 // taken from mpd package

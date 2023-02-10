@@ -1,9 +1,24 @@
-# WIP
+# moped
+
+- a **work in progress** mpd http/rest/socket server
+- so far: it's just a mess of spaghetti code
+
+## protocol support
+
+- [x] version
+- [x] requests
+- [x] OK response
+- [ ] binary responses
+- [x] failure response
+- [ ] command lists
+- [ ] filters
+
+## notes about responses
 
 - response keys are camelcased (in mpd it's all lowercase, except for song metadata, which is part of the audio file)
 - string, number and boolean are preferred, enums are served as strings
 
-## notes
+## dev notes
 
 - mpd [protocol docs](https://mpd.readthedocs.io/en/latest/protocol.html)
 - mpd version is 0.21.5 in debian 10.13 (buster)

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createConnection, Socket } from 'node:net';
 import { MpdCommand } from '../models/mpdCommand';
+import { IMpdError } from '../models/mpdResponse/error';
+import { parseMpdError } from '../utils/mpd';
 import { config } from './config';
 import { log } from './log';
 
@@ -26,8 +28,9 @@ interface IQueuedMessage {
   message: string;
   inProgress?: boolean;
   finished?: boolean;
+  error?: IMpdError;
   onSuccess?: (response: string) => void;
-  onError?: (err: string) => void;
+  onError?: (err: IMpdError) => void;
   rawResponse?: string;
 }
 
@@ -39,6 +42,7 @@ let messageQueue: IQueuedMessage[] = [];
 let heartBeat = 0;
 
 function receive(data: string) {
+  let processed = false;
   if (data.startsWith('OK MPD ')) {
     mpdVersion = data.split(/\s+/)[2];
     console.log('Rec mpd version:', mpdVersion);
@@ -52,6 +56,13 @@ function receive(data: string) {
   current.rawResponse = current.rawResponse ?? '';
   if (data === 'OK' || /OK\n+$/.test(data)) {
     if (data.endsWith('\nOK\n')) current.rawResponse += data.replace(/OK\n+$/, '');
+    processed = true;
+  } else if (data.startsWith('ACK ')) {
+    current.rawResponse += data.replace(/ACK /, '');
+    current.error = parseMpdError(data);
+    processed = true;
+  }
+  if (processed) {
     current.inProgress = false;
     current.finished = true;
     return;
@@ -98,7 +109,7 @@ function sendCommand(command: MpdCommand, args: string[] = []) {
         console.log('on success:', resp);
         resolve(resp);
       },
-      onError: (err: string) => {
+      onError: (err: IMpdError) => {
         console.log('on error:', err);
         reject(err);
       },
@@ -132,8 +143,13 @@ function processMessageQueue() {
     }
   }
   const finishedItem = messageQueue.find((item) => item.finished);
-  if (finishedItem && finishedItem.onSuccess) {
-    finishedItem.onSuccess(finishedItem.rawResponse ?? ''); // TODO: handle errors
+  if (finishedItem) {
+    if (finishedItem.onSuccess && !finishedItem.error) {
+      finishedItem.onSuccess(finishedItem.rawResponse ?? '');
+    }
+    if (finishedItem.onError && finishedItem.error) {
+      finishedItem.onError(finishedItem.error);
+    }
   }
   messageQueue = messageQueue.filter((item) => !item.finished);
   const hasInProgress = messageQueue.some((item) => item.inProgress);
