@@ -1,15 +1,12 @@
 import 'dotenv/config';
 import express from 'express';
-import { MpdCommand } from './models/mpdCommand';
 import { config } from './modules/config';
 import { log } from './modules/log';
 import { mpd } from './modules/mpd';
 import { controllingPlaybackRoutes } from './routes/controllingPlaybackRoutes';
 import { playbackOptionsRoutes } from './routes/playbackOptionsRoutes';
 import { statusRoutes } from './routes/statusRoutes';
-import { parseKeyValueMessage } from './utils/mpd';
 import { onExit } from './utils/process';
-import { SchemaType, toSchema } from './utils/schema';
 
 mpd.connect();
 onExit(() => {
