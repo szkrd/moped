@@ -2,18 +2,20 @@ import 'dotenv/config';
 import express from 'express';
 import fs from 'fs';
 import { Server as SocketIO } from 'socket.io';
-import { MpdCommand } from './models/mpdCommand';
 import { config } from './modules/config';
 import { log } from './modules/log';
 import { mpd } from './modules/mpd';
+import { mpdIdler } from './modules/mpdIdler';
 import { controllingPlaybackRoutes } from './routes/controllingPlaybackRoutes';
 import { playbackOptionsRoutes } from './routes/playbackOptionsRoutes';
 import { statusRoutes } from './routes/statusRoutes';
 import { onExit } from './utils/process';
 
 mpd.connect();
+mpdIdler.connect();
 onExit(() => {
   mpd.disconnect();
+  mpdIdler.disconnect();
 });
 
 const app = express();
@@ -66,17 +68,13 @@ const server = app.listen(port, host, () => {
 
 // add socketio
 const io = new SocketIO(server);
-export type TSocketIOServerInstance = typeof io;
-
-// io.on('connection', (socket) => {
-//   log.info('SocketIO client connected.');
-//   socket.on('GET', (uri) => {
-//     console.log('message: ' + uri);
-//     if (uri.startsWith('/api/status/idle')) statusRoutes.SIO_idle(socket, uri);
-
-//   });
-//   socket.on('disconnect', () => {
-//     log.info('SocketIO client disconnected');
-//   });
-// });
-// mpd.sendCommand(MpdCommand.Idle);
+io.on('connection', (socket) => {
+  log.info('[socketio] client connected');
+  mpdIdler.addListener((subsystem, at) => {
+    io.emit('idle', { subsystem, at }); // broadcast to everyone
+    log.info(`[socketio] idle message for subsystem "${subsystem}"`);
+  });
+  socket.on('disconnect', () => {
+    log.info('[socketio] client disconnected');
+  });
+});
