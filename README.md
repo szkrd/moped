@@ -16,33 +16,33 @@
 ## command support
 
 - [ ] Querying MPD’s status
-  - [x] clearerror: `/status/clear-error`
-  - [x] currentsong: `/status/current-song`
+  - [x] clearerror: `/api/status/clear-error`
+  - [x] currentsong: `/api/status/current-song`
   - [ ] idle (subsystem change listener)
-  - [x] status: `/status/status`
-  - [x] stats: `/status/stats`
+  - [x] status: `/api/status/status`
+  - [x] stats: `/api/status/stats`
 - [x] Playback options
-  - [x] consume: `/playback-options/consume`?`state=true|false|oneshot`
-  - [x] crossfade: `/playback-options/crossfade`?`seconds=number`
-  - [x] mixrampdb: `/playback-options/mixramp-db`?`decibels=number`
-  - [x] mixrampdelay: `/playback-options/mixramp-delay`?`seconds=number`
-  - [x] random: `/playback-options/random`?`state=true|false`
-  - [x] repeat: `/playback-options/repeat`?`state=true|false`
-  - [x] getvol: `/playback-options/volume`
-  - [x] setvol: `/playback-options/volume`?`vol=percent`
-  - [x] single: `/playback-options/single`?`state=true|false|oneshot`
-  - [x] replay_gain_mode: `/playback-options/replay-gain-mode`?`mode=off|track|album|auto`
-  - [x] replay_gain_status: `/playback-options/replay-gain-status`
+  - [x] consume: `/api/playback-options/consume`?`state=true|false|oneshot`
+  - [x] crossfade: `/api/playback-options/crossfade`?`seconds=number`
+  - [x] mixrampdb: `/api/playback-options/mixramp-db`?`decibels=number`
+  - [x] mixrampdelay: `/api/playback-options/mixramp-delay`?`seconds=number`
+  - [x] random: `/api/playback-options/random`?`state=true|false`
+  - [x] repeat: `/api/playback-options/repeat`?`state=true|false`
+  - [x] getvol: `/api/playback-options/volume`
+  - [x] setvol: `/api/playback-options/volume`?`vol=percent`
+  - [x] single: `/api/playback-options/single`?`state=true|false|oneshot`
+  - [x] replay_gain_mode: `/api/playback-options/replay-gain-mode`?`mode=off|track|album|auto`
+  - [x] replay_gain_status: `/api/playback-options/replay-gain-status`
 - [ ] Controlling playback
-  - [x] next: `/controlling-playback/next`
+  - [x] next: `/api/controlling-playback/next`
   - [ ] pause
   - [ ] play
   - [ ] playid
-  - [x] previous: `/controlling-playback/previous`
+  - [x] previous: `/api/controlling-playback/previous`
   - [ ] seek
   - [ ] seekId
   - [ ] seekCur
-  - [x] stop: `/controlling-playback/stop`
+  - [x] stop: `/api/controlling-playback/stop`
 - [ ] The Queue
   - [ ] add
   - [ ] addid

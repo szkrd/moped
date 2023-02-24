@@ -1,4 +1,5 @@
 import { Express } from 'express';
+import { TSocketIOServerInstance } from '..';
 import { MpdCommand } from '../models/mpdCommand';
 import { mpd } from '../modules/mpd';
 import { catchMpdError, thenSuccess } from '../utils/http';

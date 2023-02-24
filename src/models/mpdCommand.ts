@@ -3,6 +3,8 @@ export enum MpdCommand {
   Ping = 'ping',
   ClearError = 'clearerror',
   Status = 'status',
+  Idle = 'idle',
+  NoIdle = 'noidle',
   CurrentSong = 'currentsong',
   Stats = 'stats',
   // playback options

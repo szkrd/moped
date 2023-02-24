@@ -12,6 +12,15 @@ const QUEUE_TIMEOUT = 1000;
 /** Send "ping" to mpd to prevent socket close; tick increment happens on QUEUE_TIMEOUT */
 const KEEPALIVE_TICK = 10;
 
+// const MPD_SENTINEL = /^(OK|ACK|list_OK)(.*)$/m;
+// const OK_MPD = /^OK MPD /;
+
+// module.exports = MpdClient;
+// MpdClient.Command = Command;
+// MpdClient.cmd = cmd;
+// MpdClient.parseKeyValueMessage = parseMpdMessage.asKeyValue;
+// MpdClient.parseArrayMessage = parseMpdMessage.asArray;
+
 // ---------------------------------------------------------
 
 interface IQueuedMessage {
@@ -25,8 +34,9 @@ interface IQueuedMessage {
   rawResponse?: string;
 }
 
+// const emitter = new EventEmitter();
 let socket: Socket;
-let isDisconnecting = false;
+// let buffer = '';
 let mpdVersion = '';
 let messageQueue: IQueuedMessage[] = [];
 let heartBeat = 0;
@@ -39,12 +49,12 @@ function receive(data: string) {
   let processed = false;
   if (data.startsWith('OK MPD ')) {
     mpdVersion = data.split(/\s+/)[2];
-    log.info('[mpd] mpd version:', mpdVersion);
+    console.log('Rec mpd version:', mpdVersion);
     return;
   }
   const current = messageQueue.find((item) => item.inProgress);
   if (!current) {
-    log.info('[log] stray message response.');
+    console.log('Stray message response.');
     return;
   }
   current.rawResponse = current.rawResponse ?? '';
@@ -62,6 +72,30 @@ function receive(data: string) {
     return;
   }
   current.rawResponse += data;
+  // let match: RegExpMatchArray | null;
+  // buffer += data;
+  // A command returns OK on completion or ACK some error on failure.
+  // These denote the end of command execution.
+  // while ((match = buffer.match(/^(OK|ACK|list_OK)(.*)$/m))) {
+  //   const msg = buffer.substring(0, match.index);
+  //   const line = match[0];
+  //   const code = match[1];
+  //   const str = match[2];
+  //   if (code === 'ACK') {
+  //     console.log('rec ACK: ', str);
+  //     //var err = new Error(str);
+  //     //this.handleMessage(err);
+  //   } else if (line.startsWith('OK MPD ')) {
+  //     //this.setupIdling();
+  //     mpdVersion = line.split(/\s+/)[2];
+  //     console.log('rec OK.', mpdVersion);
+  //   } else {
+  //     console.log('handle msg: ', msg);
+  //     //this.handleMessage(null, msg);
+  //   }
+
+  //   buffer = buffer.substring(msg.length + line.length + 1);
+  // }
 }
 
 function sendCommand(command: MpdCommand, args: string | string[] = []) {
@@ -71,21 +105,33 @@ function sendCommand(command: MpdCommand, args: string | string[] = []) {
   const quotedArgs = args.map((arg) => (/\s/g.test(arg) ? `"${arg}"` : arg));
   // A command sequence is terminated by the newline character.
   const message = [command, ...quotedArgs].join(' ') + '\n';
-  log.info(`[mpd] sending command: ${message.trim()}`);
+  log.info(`Sending command: ${message}`);
   return new Promise<string>((resolve, reject) => {
     messageQueue.push({
       command,
       message,
       onSuccess: (resp: string) => {
-        log.info('[mpd] on success:', resp || 'no data.');
+        console.log('on success:', resp);
         resolve(resp);
       },
       onError: (err: IMpdError) => {
-        log.info('[mpd] on error:', err);
+        console.log('on error:', err);
         reject(err);
       },
     });
   });
+  // socket.write(message);
+  // return new Promise((resolve, reject) => {
+  // });
+  // socket.write('idle');
+  // var self = this;
+  // callback = callback || noop.bind(this);
+  // assert.ok(self.idling);
+  // self.send('noidle\n');
+  // self.sendWithCallback(command, callback);
+  // self.sendWithCallback('idle', function (err, msg) {
+  //   self.handleIdleResultsLoop(err, msg);
+  // });
 }
 
 function processMessageQueue() {
@@ -122,22 +168,23 @@ function processMessageQueue() {
 }
 
 function connect() {
-  log.info('[mpd] socket connnect');
+  log.info('Mpd idler connect.');
   const { host, port } = config.mpd;
   socket = createConnection(port, host);
   socket.setEncoding('utf8');
   socket.on('data', (data) => {
-    const details = data.length > 10 ? `(length: ${data.length})` : `(${String(data).trim()})`;
-    log.info('[mpd] socket data ' + details);
+    console.log('on idle data:', data);
     receive(data.toString());
   });
   socket.on('close', function () {
-    log.info('[mpd] socket close');
+    console.log('mpd>>> close');
   });
   socket.on('error', (err) => {
-    log.error('[mpd] socket error', err);
+    console.log('mpd>>> error', err);
   });
-  // idle mode will be handled through a different connection
+  // Idle mode probably is better suited for a live socket connection, not a rest interface
+  // (Idle mode waits until there is a noteworthy change in one or more of MPD’s subsystems.
+  // As soon as there is one, it lists all changed systems.)
   socket.write('noidle\n');
   setTimeout(processMessageQueue, QUEUE_TIMEOUT);
 }
@@ -147,15 +194,21 @@ function connect() {
  * as the protocol requires, without sending explicit "close").
  */
 function disconnect() {
-  if (isDisconnecting) return;
-  log.info('[mpd] socket end');
+  log.info('Mpd disconnect.');
   socket.end();
-  isDisconnecting = true;
+}
+
+/**
+ * Sends "ping" (which does nothing but return "OK".)
+ */
+function ping() {
+  // TODO
 }
 
 export const mpd = {
   isMinVer,
   connect,
+  ping,
   disconnect,
   sendCommand,
 };

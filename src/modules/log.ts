@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { config } from './config';
 import { colorize } from '../utils/ansi';
 
@@ -15,6 +14,9 @@ const PREFIX = `[${config.appName}]`;
 
 const _rawLog = (action: TConsoleMethod = 'log', ...args: any[]) => {
   if (action === 'debug') return;
+  if (typeof args[0] === 'string') {
+    args[0] = args[0].replace(/^\[(.*?)]/, colorize.magenta(`[$1]`));
+  }
   console[action](colorize.cyan(PREFIX), ...args);
 };
 
