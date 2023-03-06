@@ -1,7 +1,9 @@
 # moped
 
 - a **work in progress** mpd http/SSE/socket server
-- so far: it's just a mess of spaghetti code
+- so far: it's just a mess of spaghetti code, started out with manually fooling around the mpd protocol
+- in fact I'm not even sure this is a good idea, the protocol response parsing makes command lag visible,
+  which is a bad thing for (near)realtime audio playback systems
 
 ## env vars
 
@@ -15,6 +17,8 @@ Copy _.env.example_ to _.env_ and edit to your needs.
 - **PUBLIC_DIR** = `public`
 
 ## protocol support
+
+All api calls are routed to `/api`, if set, static public will be served at the server root.
 
 - [x] version
 - [x] requests

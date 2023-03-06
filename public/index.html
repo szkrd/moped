@@ -6,18 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.3.min.js"></script>
     <title>moped</title>
+    <style type="text/css">
+      #status-idle {
+        height: 1em;
+        width: 200px;
+        border: 0;
+      }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <h1>moped</h1>
-    <ul>
-      <li><a href="./status-idle.html">status-idle</a></li>
-    </ul>
     <!-- ======================================================================================  -->
     <h2>Querying MPD's status</h2>
     <ul>
       <li><strong>clearerror:</strong> <button data-url="/api/status/clear-error">no param</button></li>
       <li><strong>currentsong:</strong> <button data-url="/api/status/current-song">no param</button></li>
       <li><strong>status:</strong> <button data-url="/api/status/status">no param</button></li>
+      <li><strong>status-idle:</strong> <textarea id="status-idle"></textarea></li>
       <li><strong>stats:</strong> <button data-url="/api/status/stats">no param</button></li>
     </ul>
     <!-- ======================================================================================  -->
@@ -35,25 +41,50 @@
         <button data-url="/api/playback-options/crossfade?seconds=0">0s</button>
       </li>
       <li>
-        <strong>mixrampdb:</strong> <button data-url="/api/playback-options/mixramp-db`?`decibels=number">-</button>
+        <strong>mixrampdb:</strong>
+        <button data-url="/api/playback-options/mixramp-db?decibels=50">50 db</button>
+        <button data-url="/api/playback-options/mixramp-db?decibels=0">0 db</button>
       </li>
       <li>
         <strong>mixrampdelay:</strong>
-        <button data-url="/api/playback-options/mixramp-delay`?`seconds=number">-</button>
-      </li>
-      <li><strong>random:</strong> <button data-url="/api/playback-options/random`?`state=true|false">-</button></li>
-      <li><strong>repeat:</strong> <button data-url="/api/playback-options/repeat`?`state=true|false">-</button></li>
-      <li><strong>getvol:</strong> <button data-url="/api/playback-options/volume">-</button></li>
-      <li><strong>setvol:</strong> <button data-url="/api/playback-options/volume`?`vol=percent">-</button></li>
-      <li>
-        <strong>single:</strong> <button data-url="/api/playback-options/single`?`state=true|false|oneshot">-</button>
+        <button data-url="/api/playback-options/mixramp-delay?seconds=5">5s</button>
+        <button data-url="/api/playback-options/mixramp-delay?seconds=0">0s</button>
       </li>
       <li>
-        <strong>replay_gain_mode:</strong>
-        <button data-url="/api/playback-options/replay-gain-mode`?`mode=off|track|album|auto">-</button>
+        <strong>random:</strong>
+        <button data-url="/api/playback-options/random?state=true">true</button>,
+        <button data-url="/api/playback-options/random?state=false">false</button>
       </li>
       <li>
-        <strong>replay_gain_status:</strong> <button data-url="/api/playback-options/replay-gain-status">-</button>
+        <strong>repeat:</strong>
+        <button data-url="/api/playback-options/repeat?state=true">true</button>,
+        <button data-url="/api/playback-options/repeat?state=false">false</button>
+      </li>
+      <li>
+        <strong>getvol:</strong>
+        <button data-url="/api/playback-options/volume">no param</button>
+      </li>
+      <li>
+        <strong>setvol:</strong>
+        <button data-url="/api/playback-options/volume?vol=50">50 %</button>,
+        <button data-url="/api/playback-options/volume?vol=75">75 %</button>
+      </li>
+      <li>
+        <strong>single:</strong>
+        <button data-url="/api/playback-options/single?state=true">true</button>,
+        <button data-url="/api/playback-options/single?state=false">false</button>,
+        <button data-url="/api/playback-options/single?state=oneshot">oneshot</button>
+      </li>
+      <li>
+        <strong>replay-gain-mode:</strong>
+        <button data-url="/api/playback-options/replay-gain-mode?mode=off">off</button>,
+        <button data-url="/api/playback-options/replay-gain-mode?mode=track">track</button>,
+        <button data-url="/api/playback-options/replay-gain-mode?mode=album">album</button>,
+        <button data-url="/api/playback-options/replay-gain-mode?mode=auto">auto</button>
+      </li>
+      <li>
+        <strong>replay-gain-status:</strong>
+        <button data-url="/api/playback-options/replay-gain-status">no param</button>
       </li>
     </ul>
     <!-- ======================================================================================  -->
@@ -111,6 +142,13 @@
             console.info(resp);
           });
         }
+      });
+
+      const socket = io();
+      const textarea = document.getElementById('status-idle');
+      textarea.value = '';
+      socket.on('idle', (data) => {
+        textarea.value = `${data.at}: ${data.subsystem}\n` + textarea.value;
       });
     });
   </script>

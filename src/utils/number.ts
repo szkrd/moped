@@ -22,7 +22,6 @@ export function parseFloatSafe(val: unknown, fallback = -1): number {
 
 export function parseFloatRelativeSafe(val: unknown, fallback = -1): string | number {
   const convertedNum = parseFloatSafe(String(val), fallback);
-  console.log('1>>>', String(val));
   return String(val).startsWith('+') ? `+${convertedNum}` : convertedNum;
 }
 
