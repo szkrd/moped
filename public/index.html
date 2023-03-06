@@ -22,15 +22,44 @@
     <h2>Playback options</h2>
     <h2>Controlling playback</h2>
     <ul>
+      <li>next: <button data-url="/api/controlling-playback/next">next</button></li>
+      <li>previous: <button data-url="/api/controlling-playback/previous">previous</button></li>
+      <li>stop: <button data-url="/api/controlling-playback/stop">stop</button></li>
       <li>
+        pause:
         <button data-url="/api/controlling-playback/pause?state=true">pause (state true)</button>
         <button data-url="/api/controlling-playback/pause?state=false">pause (state false, unpause)</button>
         <button data-url="/api/controlling-playback/pause">pause (no param, toggle)</button>
       </li>
       <li>
+        seek:
         <button data-url="/api/controlling-playback/seek">seek (invalid)</button>
         <button data-url="/api/controlling-playback/seek?songPos=0&time=0">seek (1st item in playlist)</button>
         <button data-url="/api/controlling-playback/seek?songPos=1&time=5">seek (2nd item in playlist, 5 sec)</button>
+      </li>
+      <li>
+        seek-id:
+        <button data-url="/api/controlling-playback/seek-id">seek-id (invalid)</button>
+        <button data-url="/api/controlling-playback/seek-id?songId=176&time=5">
+          seek-id (item id 176 in playlist, 5s)
+        </button>
+      </li>
+      <li>
+        play:
+        <button data-url="/api/controlling-playback/play">play (where the playlist was stopped)</button>
+        <button data-url="/api/controlling-playback/play?songPos=0">play (1st item in playlist)</button>
+      </li>
+      <li>
+        play-id:
+        <button data-url="/api/controlling-playback/play-id">play id (where the playlist was stopped)</button>
+        <button data-url="/api/controlling-playback/play-id?songId=176">play id (song id 176, use status)</button>
+      </li>
+      <li>
+        seek-cur:
+        <button data-url="/api/controlling-playback/seek-cur">seek current (invalid)</button>
+        <button data-url="/api/controlling-playback/seek-cur?time=5">seek current (to 5s)</button>
+        <button data-url="/api/controlling-playback/seek-cur?time=%2B15">seek current (+15s)</button>
+        <button data-url="/api/controlling-playback/seek-cur?time=-15">seek current (-15s)</button>
       </li>
     </ul>
   </body>

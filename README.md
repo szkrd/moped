@@ -44,15 +44,15 @@ Copy _.env.example_ to _.env_ and edit to your needs.
   - [x] single: `/api/playback-options/single`?`state=true|false|oneshot`
   - [x] replay_gain_mode: `/api/playback-options/replay-gain-mode`?`mode=off|track|album|auto`
   - [x] replay_gain_status: `/api/playback-options/replay-gain-status`
-- [ ] Controlling playback
+- [x] Controlling playback
   - [x] next: `/api/controlling-playback/next`
   - [x] pause: `/api/controlling-playback/pause`?`(state)=true|false`
-  - [ ] play
-  - [ ] playid
+  - [x] play: `/api/controlling-playback/play`?`(songPos)=number`
+  - [x] playid: `/api/controlling-playback/play-id`?`(songId)=number`
   - [x] previous: `/api/controlling-playback/previous`
   - [x] seek: `/api/controlling-playback/seek`?`songPos=number`&`time=number`
-  - [ ] seekId
-  - [ ] seekCur
+  - [x] seekId: `/api/controlling-playback/seek-id`?`songId=number`&`time=number`
+  - [x] seekCur: `/api/controlling-playback/seek-cur`?`time=number|relative-number`
   - [x] stop: `/api/controlling-playback/stop`
 - [ ] The Queue
   - [ ] add

@@ -26,12 +26,14 @@ export const escapeRegExp = (text: string) => {
 /** Creates RegExp from string. */
 export const newRex = (text: string, flags: string) => new RegExp(escapeRegExp(String(text)), flags);
 
-/**
- * Splits a string into two (or more) parts.
- */
+/** Splits a string into two (or more) parts. */
 export function split(text: string, splitStr: string, all = false): string[] {
   if (all) return text.split(newRex(splitStr, 'g'));
   const idx = text.indexOf(splitStr);
   if (idx === -1) return [text];
   return [text.substring(0, idx), text.substring(idx + splitStr.length)];
+}
+
+export function stringOrUndefined(val: any): string | undefined {
+  return [undefined, null, NaN].includes(val) ? undefined : String(val);
 }

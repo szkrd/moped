@@ -40,6 +40,10 @@ controllingPlaybackRoutes.GET_next(app, '/api/controlling-playback/next');
 controllingPlaybackRoutes.GET_stop(app, '/api/controlling-playback/stop');
 controllingPlaybackRoutes.GET_pause(app, '/api/controlling-playback/pause'); // ?state
 controllingPlaybackRoutes.GET_seek(app, '/api/controlling-playback/seek'); // ?songPos &time
+controllingPlaybackRoutes.GET_seekId(app, '/api/controlling-playback/seek-id'); // ?songId &time
+controllingPlaybackRoutes.GET_play(app, '/api/controlling-playback/play'); // ?songPos
+controllingPlaybackRoutes.GET_playId(app, '/api/controlling-playback/play-id'); // ?songId
+controllingPlaybackRoutes.GET_seekCur(app, '/api/controlling-playback/seek-cur'); // ?time
 
 const { host, port, publicDir } = config;
 

@@ -20,6 +20,12 @@ export function parseFloatSafe(val: unknown, fallback = -1): number {
   return validNumber ? convertedNum : fallback;
 }
 
+export function parseFloatRelativeSafe(val: unknown, fallback = -1): string | number {
+  const convertedNum = parseFloatSafe(String(val), fallback);
+  console.log('1>>>', String(val));
+  return String(val).startsWith('+') ? `+${convertedNum}` : convertedNum;
+}
+
 export function parseNumberSafe(val: unknown, fallback: number): number {
   return (String(val).includes('.') ? parseFloatSafe : parseIntSafe)(val, fallback);
 }

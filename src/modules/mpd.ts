@@ -64,7 +64,7 @@ function receive(data: string) {
   current.rawResponse += data;
 }
 
-function sendCommand(command: MpdCommand, args: string | string[] = []) {
+function sendCommand(command: MpdCommand, args: string | undefined | string[] = []) {
   if (!Array.isArray(args)) args = [args];
   // remove undefineds
   args = args.filter((val) => val !== undefined);
