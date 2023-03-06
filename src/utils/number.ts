@@ -1,4 +1,4 @@
-export function parseIntSafe(val: unknown, fallback: number): number {
+export function parseIntSafe(val: unknown, fallback = -1): number {
   const convertedNum = parseInt(String(val), 10);
   const validNumber = typeof convertedNum === 'number' && isFinite(convertedNum) && !isNaN(convertedNum);
   return validNumber ? convertedNum : fallback;
@@ -14,7 +14,7 @@ export function parsePercentOrNull(val: unknown): number | null {
   return num === null || num > 100 || num < 0 ? null : num;
 }
 
-export function parseFloatSafe(val: unknown, fallback: number): number {
+export function parseFloatSafe(val: unknown, fallback = -1): number {
   const convertedNum = parseFloat(String(val));
   const validNumber = typeof convertedNum === 'number' && isFinite(convertedNum) && !isNaN(convertedNum);
   return validNumber ? convertedNum : fallback;

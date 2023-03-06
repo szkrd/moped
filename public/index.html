@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.3.min.js"></script>
     <title>moped</title>
   </head>
   <body>
@@ -11,5 +12,40 @@
     <ul>
       <li><a href="./status-idle.html">status-idle</a></li>
     </ul>
+    <h2>Querying MPD's status</h2>
+    <ul>
+      <li><button data-url="/api/status/clear-error">clearerror</button></li>
+      <li><button data-url="/api/status/current-song">currentsong</button></li>
+      <li><button data-url="/api/status/status">status</button></li>
+      <li><button data-url="/api/status/stats">stats</button></li>
+    </ul>
+    <h2>Playback options</h2>
+    <h2>Controlling playback</h2>
+    <ul>
+      <li>
+        <button data-url="/api/controlling-playback/pause?state=true">pause (state true)</button>
+        <button data-url="/api/controlling-playback/pause?state=false">pause (state false, unpause)</button>
+        <button data-url="/api/controlling-playback/pause">pause (no param, toggle)</button>
+      </li>
+      <li>
+        <button data-url="/api/controlling-playback/seek">seek (invalid)</button>
+        <button data-url="/api/controlling-playback/seek?songPos=0&time=0">seek (1st item in playlist)</button>
+        <button data-url="/api/controlling-playback/seek?songPos=1&time=5">seek (2nd item in playlist, 5 sec)</button>
+      </li>
+    </ul>
   </body>
+  <script type="text/javascript">
+    $(() => {
+      $('body').on('click', (evt) => {
+        const target = $(evt.target);
+        if (!target.is('button')) return;
+        const dataUrl = target.data('url');
+        if (dataUrl) {
+          $.getJSON(dataUrl, (resp) => {
+            console.info(resp);
+          });
+        }
+      });
+    });
+  </script>
 </html>

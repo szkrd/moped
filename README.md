@@ -3,6 +3,17 @@
 - a **work in progress** mpd http/SSE/socket server
 - so far: it's just a mess of spaghetti code
 
+## env vars
+
+The code uses [dotenv](https://www.npmjs.com/package/dotenv).
+Copy _.env.example_ to _.env_ and edit to your needs.
+
+- **HOST** = `127.0.0.1`
+- **PORT** = `4000`
+- **MPD_HOST** = `127.0.0.1`
+- **MPD_PORT** = `6600`
+- **PUBLIC_DIR** = `public`
+
 ## protocol support
 
 - [x] version
@@ -15,10 +26,10 @@
 
 ## command support
 
-- [ ] Querying MPD’s status
+- [x] Querying MPD's status
   - [x] clearerror: `/api/status/clear-error`
   - [x] currentsong: `/api/status/current-song`
-  - [ ] idle (subsystem change listener)
+  - [x] idle (subsystem change listener), **socketio**
   - [x] status: `/api/status/status`
   - [x] stats: `/api/status/stats`
 - [x] Playback options
@@ -35,11 +46,11 @@
   - [x] replay_gain_status: `/api/playback-options/replay-gain-status`
 - [ ] Controlling playback
   - [x] next: `/api/controlling-playback/next`
-  - [ ] pause
+  - [x] pause: `/api/controlling-playback/pause`?`(state)=true|false`
   - [ ] play
   - [ ] playid
   - [x] previous: `/api/controlling-playback/previous`
-  - [ ] seek
+  - [x] seek: `/api/controlling-playback/seek`?`songPos=number`&`time=number`
   - [ ] seekId
   - [ ] seekCur
   - [x] stop: `/api/controlling-playback/stop`

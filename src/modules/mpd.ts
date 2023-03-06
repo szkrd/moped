@@ -66,6 +66,8 @@ function receive(data: string) {
 
 function sendCommand(command: MpdCommand, args: string | string[] = []) {
   if (!Array.isArray(args)) args = [args];
+  // remove undefineds
+  args = args.filter((val) => val !== undefined);
   // If arguments contain spaces, they should be surrounded by double quotation marks.
   if (!Object.values(MpdCommand).includes(command)) throw new Error('Unknown command');
   const quotedArgs = args.map((arg) => (/\s/g.test(arg) ? `"${arg}"` : arg));

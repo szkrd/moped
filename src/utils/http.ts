@@ -6,8 +6,8 @@ export function invalidVersionError(res: Response, ver: string, field?: string) 
   res.status(400).json({ error: `mpd version ${ver} or greater required`, field });
 }
 
-export function invalidQueryParamError(res: Response, field: string) {
-  res.status(400).json({ error: `invalid or missing query parameter "${field}"` });
+export function invalidQueryParamError(res: Response, field: string | string[]) {
+  res.status(400).json({ error: `invalid or missing query parameter ${JSON.stringify(field)}` });
 }
 
 export function thenSuccess(res: Response) {

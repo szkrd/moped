@@ -38,6 +38,8 @@ playbackOptionsRoutes.GET_replayGainMode(app, '/api/playback-options/replay-gain
 controllingPlaybackRoutes.GET_previous(app, '/api/controlling-playback/previous');
 controllingPlaybackRoutes.GET_next(app, '/api/controlling-playback/next');
 controllingPlaybackRoutes.GET_stop(app, '/api/controlling-playback/stop');
+controllingPlaybackRoutes.GET_pause(app, '/api/controlling-playback/pause'); // ?state
+controllingPlaybackRoutes.GET_seek(app, '/api/controlling-playback/seek'); // ?songPos &time
 
 const { host, port, publicDir } = config;
 
