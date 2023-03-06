@@ -12,54 +12,91 @@
     <ul>
       <li><a href="./status-idle.html">status-idle</a></li>
     </ul>
+    <!-- ======================================================================================  -->
     <h2>Querying MPD's status</h2>
     <ul>
-      <li><button data-url="/api/status/clear-error">clearerror</button></li>
-      <li><button data-url="/api/status/current-song">currentsong</button></li>
-      <li><button data-url="/api/status/status">status</button></li>
-      <li><button data-url="/api/status/stats">stats</button></li>
+      <li><strong>clearerror:</strong> <button data-url="/api/status/clear-error">no param</button></li>
+      <li><strong>currentsong:</strong> <button data-url="/api/status/current-song">no param</button></li>
+      <li><strong>status:</strong> <button data-url="/api/status/status">no param</button></li>
+      <li><strong>stats:</strong> <button data-url="/api/status/stats">no param</button></li>
     </ul>
+    <!-- ======================================================================================  -->
     <h2>Playback options</h2>
+    <ul>
+      <li>
+        <strong>consume:</strong>
+        <button data-url="/api/playback-options/consume?state=true">true</button>,
+        <button data-url="/api/playback-options/consume?state=false">false</button>,
+        <button data-url="/api/playback-options/consume?state=oneshot">oneshot</button>
+      </li>
+      <li>
+        <strong>crossfade:</strong>
+        <button data-url="/api/playback-options/crossfade?seconds=5">5s</button>,
+        <button data-url="/api/playback-options/crossfade?seconds=0">0s</button>
+      </li>
+      <li>
+        <strong>mixrampdb:</strong> <button data-url="/api/playback-options/mixramp-db`?`decibels=number">-</button>
+      </li>
+      <li>
+        <strong>mixrampdelay:</strong>
+        <button data-url="/api/playback-options/mixramp-delay`?`seconds=number">-</button>
+      </li>
+      <li><strong>random:</strong> <button data-url="/api/playback-options/random`?`state=true|false">-</button></li>
+      <li><strong>repeat:</strong> <button data-url="/api/playback-options/repeat`?`state=true|false">-</button></li>
+      <li><strong>getvol:</strong> <button data-url="/api/playback-options/volume">-</button></li>
+      <li><strong>setvol:</strong> <button data-url="/api/playback-options/volume`?`vol=percent">-</button></li>
+      <li>
+        <strong>single:</strong> <button data-url="/api/playback-options/single`?`state=true|false|oneshot">-</button>
+      </li>
+      <li>
+        <strong>replay_gain_mode:</strong>
+        <button data-url="/api/playback-options/replay-gain-mode`?`mode=off|track|album|auto">-</button>
+      </li>
+      <li>
+        <strong>replay_gain_status:</strong> <button data-url="/api/playback-options/replay-gain-status">-</button>
+      </li>
+    </ul>
+    <!-- ======================================================================================  -->
     <h2>Controlling playback</h2>
     <ul>
-      <li>next: <button data-url="/api/controlling-playback/next">next</button></li>
-      <li>previous: <button data-url="/api/controlling-playback/previous">previous</button></li>
-      <li>stop: <button data-url="/api/controlling-playback/stop">stop</button></li>
+      <li><strong>next:</strong> <button data-url="/api/controlling-playback/next">next</button></li>
+      <li><strong>previous:</strong> <button data-url="/api/controlling-playback/previous">previous</button></li>
+      <li><strong>stop:</strong> <button data-url="/api/controlling-playback/stop">stop</button></li>
       <li>
-        pause:
-        <button data-url="/api/controlling-playback/pause?state=true">pause (state true)</button>
-        <button data-url="/api/controlling-playback/pause?state=false">pause (state false, unpause)</button>
-        <button data-url="/api/controlling-playback/pause">pause (no param, toggle)</button>
+        <strong>pause:</strong>
+        <button data-url="/api/controlling-playback/pause">no param</button> (toggle),
+        <button data-url="/api/controlling-playback/pause?state=true">state true</button> (pause),
+        <button data-url="/api/controlling-playback/pause?state=false">state false</button> (unpause)
       </li>
       <li>
-        seek:
-        <button data-url="/api/controlling-playback/seek">seek (invalid)</button>
-        <button data-url="/api/controlling-playback/seek?songPos=0&time=0">seek (1st item in playlist)</button>
-        <button data-url="/api/controlling-playback/seek?songPos=1&time=5">seek (2nd item in playlist, 5 sec)</button>
+        <strong>seek:</strong>
+        <button data-url="/api/controlling-playback/seek">no param</button> (invalid),
+        <button data-url="/api/controlling-playback/seek?songPos=0&time=0">song pos 0, time 0s</button> (1st item in
+        playlist), <button data-url="/api/controlling-playback/seek?songPos=1&time=5">song pos 1, time 5s</button> (2nd
+        item in playlist, 5 sec)
       </li>
       <li>
-        seek-id:
-        <button data-url="/api/controlling-playback/seek-id">seek-id (invalid)</button>
-        <button data-url="/api/controlling-playback/seek-id?songId=176&time=5">
-          seek-id (item id 176 in playlist, 5s)
-        </button>
+        <strong>seek-id:</strong>
+        <button data-url="/api/controlling-playback/seek-id">no param</button> (invalid),
+        <button data-url="/api/controlling-playback/seek-id?songId=176&time=5">song id 176, time 5s</button> (item id
+        176 in playlist, 5s)
       </li>
       <li>
-        play:
-        <button data-url="/api/controlling-playback/play">play (where the playlist was stopped)</button>
-        <button data-url="/api/controlling-playback/play?songPos=0">play (1st item in playlist)</button>
+        <strong>play:</strong>
+        <button data-url="/api/controlling-playback/play">no param</button> (where the playlist was stopped),
+        <button data-url="/api/controlling-playback/play?songPos=0">song pos 0</button> (1st item in playlist)
       </li>
       <li>
-        play-id:
-        <button data-url="/api/controlling-playback/play-id">play id (where the playlist was stopped)</button>
-        <button data-url="/api/controlling-playback/play-id?songId=176">play id (song id 176, use status)</button>
+        <strong>play-id:</strong>
+        <button data-url="/api/controlling-playback/play-id">no param</button> (where the playlist was stopped),
+        <button data-url="/api/controlling-playback/play-id?songId=176">song id 176</button> (based on status)
       </li>
       <li>
-        seek-cur:
-        <button data-url="/api/controlling-playback/seek-cur">seek current (invalid)</button>
-        <button data-url="/api/controlling-playback/seek-cur?time=5">seek current (to 5s)</button>
-        <button data-url="/api/controlling-playback/seek-cur?time=%2B15">seek current (+15s)</button>
-        <button data-url="/api/controlling-playback/seek-cur?time=-15">seek current (-15s)</button>
+        <strong>seek-cur:</strong>
+        <button data-url="/api/controlling-playback/seek-cur">invalid</button>,
+        <button data-url="/api/controlling-playback/seek-cur?time=5">time 5s</button> (absolute),
+        <button data-url="/api/controlling-playback/seek-cur?time=%2B15">time +15s</button> (relative),
+        <button data-url="/api/controlling-playback/seek-cur?time=-15">time -15s</button> (relative)
       </li>
     </ul>
   </body>
