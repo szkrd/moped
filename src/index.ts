@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { debounce } from 'lodash';
 import fs from 'fs';
 import { Server as SocketIO } from 'socket.io';
 import { config } from './modules/config';
@@ -53,10 +54,12 @@ const server = app.listen(config.port, config.host, () => {
 const io = new SocketIO(server);
 io.on('connection', (socket) => {
   log.info('[socketio] client connected');
-  mpdIdler.addListener((subsystem, at) => {
-    io.emit('idle', { subsystem, at }); // broadcast to everyone
-    log.info(`[socketio] idle message for subsystem "${subsystem}"`);
-  });
+  mpdIdler.addListener(
+    debounce((subsystem, at) => {
+      io.emit('idle', { subsystem, at }); // broadcast to everyone
+      log.info(`[socketio] idle message for subsystem "${subsystem}"`);
+    }, 1000)
+  );
   socket.on('disconnect', () => {
     log.info('[socketio] client disconnected');
   });

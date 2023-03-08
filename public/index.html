@@ -2,9 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Moped</title>
+    <title>moped</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./scripts/vendor/lodash.4.17.21.min.js"></script>
     <script src="./scripts/vendor/dayjs.1.11.7.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.3.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -12,8 +13,9 @@
     <link rel="stylesheet" href="styles/main.css" />
   </head>
   <body>
+    <div class="load-indicator">loading...</div>
     <div class="controls">
-      <button class="action" id="controls-volumeDown">volume -</button>
+      <button class="action" id="controls-volume">volume:</button>
       <button class="action vol-num vol-num-0" data-api-call="/api/playback-options/volume?vol=0">0</button>
       <button class="action vol-num vol-num-1" data-api-call="/api/playback-options/volume?vol=10">1</button>
       <button class="action vol-num vol-num-2" data-api-call="/api/playback-options/volume?vol=20">2</button>
@@ -25,7 +27,6 @@
       <button class="action vol-num vol-num-8" data-api-call="/api/playback-options/volume?vol=80">8</button>
       <button class="action vol-num vol-num-9" data-api-call="/api/playback-options/volume?vol=90">9</button>
       <button class="action vol-num vol-num-10" data-api-call="/api/playback-options/volume?vol=100">10</button>
-      <button class="action" id="controls-volumeUp">volume +</button>
       <button class="action" data-api-call="/api/controlling-playback/stop">stop</button>
       <button class="action" data-api-call="/api/controlling-playback/previous">prev</button>
       <button class="action" data-api-call="/api/controlling-playback/next">next</button>
@@ -33,46 +34,11 @@
       <button class="action" data-api-call="/api/controlling-playback/play">play</button>
       <button class="action" id="controls-refresh">refresh</button>
     </div>
-    <ul class="status json-data">
-      <li><label>audio</label><span id="status-audio"></span></li>
-      <li><label>bitrate</label><span id="status-bitrate"></span></li>
-      <li><label>duration</label><span id="status-duration"></span></li>
-      <li><label>elapsed</label><span id="status-elapsed"></span></li>
-      <li><label>mixrampDb</label><span id="status-mixrampDb"></span></li>
-      <li><label>playlist</label><span id="status-playlist"></span></li>
-      <li><label>playlistLength</label><span id="status-playlistLength"></span></li>
-      <li><label>song</label><span id="status-song"></span></li>
-      <li><label>songId</label><span id="status-songId"></span></li>
-      <li><label>state</label><span id="status-state"></span></li>
-      <li><label>time</label><span id="status-time"></span></li>
-      <li><label>volume</label><span id="status-volume"></span></li>
-      <li><label>consume</label><span id="status-consume"></span></li>
-      <li><label>random</label><span id="status-random"></span></li>
-      <li><label>repeat</label><span id="status-repeat"></span></li>
-      <li><label>single</label><span id="status-single"></span></li>
-    </ul>
-    <ul class="stats json-data">
-      <li><label>albums</label><span id="stats-albums"></span></li>
-      <li><label>artists</label><span id="stats-artists"></span></li>
-      <li><label>dbPlaytime</label><span id="stats-dbPlaytime"></span></li>
-      <li><label>dbUpdate</label><span id="stats-dbUpdate"></span></li>
-      <li><label>playtime</label><span id="stats-playtime"></span></li>
-      <li><label>songs</label><span id="stats-songs"></span></li>
-      <li><label>uptime</label><span id="stats-uptime"></span></li>
-    </ul>
-    <ul class="current-song json-data">
-      <li><label>id</label><span id="current-song-id"></span></li>
-      <li><label>name</label><span id="current-song-name"></span></li>
-      <li class="space-after"><label>title</label><span id="current-song-title"></span></li>
-      <li><label>duration</label><span id="current-song-duration"></span></li>
-      <li><label>file</label><span id="current-song-file"></span></li>
-      <li><label>pos</label><span id="current-song-pos"></span></li>
-      <li><label>time</label><span id="current-song-time"></span></li>
-    </ul>
-    <ul class="idle json-data">
-      <li><label>at</label><span id="idle-at"></span></li>
-      <li><label>subsystem</label><span id="idle-subsystem"></span></li>
-    </ul>
+    <h2 class="current-song-name"></h2>
+    <ul class="current-song json-data"></ul>
+    <ul class="status json-data"></ul>
+    <ul class="stats json-data"></ul>
+    <ul class="idle json-data"></ul>
     <script type="module">
       import main from './scripts/modules/main.js';
       $(main);

@@ -4,9 +4,10 @@ body {
   height: 100%;
 }
 
+/* CONTROLS */
+
 .controls {
   margin: 3px;
-  border: 1px solid lightgrey;
   border-radius: 3px;
   display: flex;
   flex-wrap: wrap;
@@ -17,43 +18,54 @@ body {
   display: block;
   margin: 2px;
   background-color: lightgray;
-  border: 1px outset gray;
   border-radius: 2px;
 }
 
-/*
 .controls button.selected {
-  color: red;
-  background-color: peachpuff;
+  color: white;
+  font-weight: bold;
 }
-*/
+
+/* TITLE */
+
+h2 {
+  margin: 2px 2px 30px 2px;
+  padding: 3px 6px;
+  font-size: 26px;
+  font-weight: 100;
+  background-color: black;
+  color: #fff;
+}
 
 /* JSON DATA */
 
 .json-data {
   list-style: none;
-  margin: 5px;
+  margin: 10px 5px;
   display: flex;
   flex-wrap: wrap;
   padding: 0;
   width: calc(100% - 10px);
-  background-color: antiquewhite;
-  border: 1px solid lightgrey;
   border-radius: 3px;
   font-size: 16px;
   line-height: 18px;
+  min-height: 18px;
+  opacity: 0.2;
+  filter: grayscale(1) sepia(1) brightness(0.2);
+}
+
+.json-data:hover {
+  opacity: 1;
+  filter: none;
 }
 
 .json-data li {
   margin: 2px;
   padding: 1px 4px;
-  background-color: snow;
-  border: 1px solid lightgrey;
   border-radius: 3px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
 }
 
 .json-data li.space-after {
@@ -71,6 +83,10 @@ body {
   display: block;
 }
 
+.json-data li span {
+  word-break: break-all;
+}
+
 .json-data li .number {
   color: darkorange;
 }
@@ -83,4 +99,21 @@ body {
 
 #current-song-title {
   font-weight: bold;
+}
+
+/* LOADER */
+
+.load-indicator {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: black;
+  font-size: 12px;
+  color: white;
+  padding: 2px 4px;
+  display: none;
+}
+
+body.loading .load-indicator {
+  display: block;
 }
