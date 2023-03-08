@@ -1,0 +1,86 @@
+html,
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+}
+
+.controls {
+  margin: 3px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.controls button {
+  padding: 10px;
+  display: block;
+  margin: 2px;
+  background-color: lightgray;
+  border: 1px outset gray;
+  border-radius: 2px;
+}
+
+/*
+.controls button.selected {
+  color: red;
+  background-color: peachpuff;
+}
+*/
+
+/* JSON DATA */
+
+.json-data {
+  list-style: none;
+  margin: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  width: calc(100% - 10px);
+  background-color: antiquewhite;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.json-data li {
+  margin: 2px;
+  padding: 1px 4px;
+  background-color: snow;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.json-data li.space-after {
+  margin-right: 6px;
+}
+
+.json-data li.disabled,
+.json-data li.disabled label {
+  color: darkgray;
+}
+
+.json-data li label {
+  color: darkred;
+  padding: 0 5px 0 0;
+  display: block;
+}
+
+.json-data li .number {
+  color: darkorange;
+}
+
+.json-data li .string {
+  color: darkcyan;
+}
+
+/* INDIVIDUAL JSON DATUM ELEMENTS */
+
+#current-song-title {
+  font-weight: bold;
+}

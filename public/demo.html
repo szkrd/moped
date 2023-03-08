@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.3.min.js"></script>
+    <title>Moped demo</title>
+    <style type="text/css">
+      #status-idle {
+        height: 1em;
+        width: 200px;
+        border: 0;
+      }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <h1>moped</h1>
+    <!-- ======================================================================================  -->
+    <h2>Querying MPD's status</h2>
+    <ul>
+      <li><strong>clearerror:</strong> <button data-url="/api/status/clear-error">no param</button></li>
+      <li><strong>currentsong:</strong> <button data-url="/api/status/current-song">no param</button></li>
+      <li><strong>status:</strong> <button data-url="/api/status/status">no param</button></li>
+      <li><strong>status-idle:</strong> <textarea id="status-idle"></textarea></li>
+      <li><strong>stats:</strong> <button data-url="/api/status/stats">no param</button></li>
+    </ul>
+    <!-- ======================================================================================  -->
+    <h2>Playback options</h2>
+    <ul>
+      <li>
+        <strong>consume:</strong>
+        <button data-url="/api/playback-options/consume?state=true">true</button>,
+        <button data-url="/api/playback-options/consume?state=false">false</button>,
+        <button data-url="/api/playback-options/consume?state=oneshot">oneshot</button>
+      </li>
+      <li>
+        <strong>crossfade:</strong>
+        <button data-url="/api/playback-options/crossfade?seconds=5">5s</button>,
+        <button data-url="/api/playback-options/crossfade?seconds=0">0s</button>
+      </li>
+      <li>
+        <strong>mixrampdb:</strong>
+        <button data-url="/api/playback-options/mixramp-db?decibels=50">50 db</button>
+        <button data-url="/api/playback-options/mixramp-db?decibels=0">0 db</button>
+      </li>
+      <li>
+        <strong>mixrampdelay:</strong>
+        <button data-url="/api/playback-options/mixramp-delay?seconds=5">5s</button>
+        <button data-url="/api/playback-options/mixramp-delay?seconds=0">0s</button>
+      </li>
+      <li>
+        <strong>random:</strong>
+        <button data-url="/api/playback-options/random?state=true">true</button>,
+        <button data-url="/api/playback-options/random?state=false">false</button>
+      </li>
+      <li>
+        <strong>repeat:</strong>
+        <button data-url="/api/playback-options/repeat?state=true">true</button>,
+        <button data-url="/api/playback-options/repeat?state=false">false</button>
+      </li>
+      <li>
+        <strong>getvol:</strong>
+        <button data-url="/api/playback-options/volume">no param</button>
+      </li>
+      <li>
+        <strong>setvol:</strong>
+        <button data-url="/api/playback-options/volume?vol=50">50 %</button>,
+        <button data-url="/api/playback-options/volume?vol=75">75 %</button>
+      </li>
+      <li>
+        <strong>single:</strong>
+        <button data-url="/api/playback-options/single?state=true">true</button>,
+        <button data-url="/api/playback-options/single?state=false">false</button>,
+        <button data-url="/api/playback-options/single?state=oneshot">oneshot</button>
+      </li>
+      <li>
+        <strong>replay-gain-mode:</strong>
+        <button data-url="/api/playback-options/replay-gain-mode?mode=off">off</button>,
+        <button data-url="/api/playback-options/replay-gain-mode?mode=track">track</button>,
+        <button data-url="/api/playback-options/replay-gain-mode?mode=album">album</button>,
+        <button data-url="/api/playback-options/replay-gain-mode?mode=auto">auto</button>
+      </li>
+      <li>
+        <strong>replay-gain-status:</strong>
+        <button data-url="/api/playback-options/replay-gain-status">no param</button>
+      </li>
+    </ul>
+    <!-- ======================================================================================  -->
+    <h2>Controlling playback</h2>
+    <ul>
+      <li><strong>next:</strong> <button data-url="/api/controlling-playback/next">next</button></li>
+      <li><strong>previous:</strong> <button data-url="/api/controlling-playback/previous">previous</button></li>
+      <li><strong>stop:</strong> <button data-url="/api/controlling-playback/stop">stop</button></li>
+      <li>
+        <strong>pause:</strong>
+        <button data-url="/api/controlling-playback/pause">no param</button> (toggle),
+        <button data-url="/api/controlling-playback/pause?state=true">state true</button> (pause),
+        <button data-url="/api/controlling-playback/pause?state=false">state false</button> (unpause)
+      </li>
+      <li>
+        <strong>seek:</strong>
+        <button data-url="/api/controlling-playback/seek">no param</button> (invalid),
+        <button data-url="/api/controlling-playback/seek?songPos=0&time=0">song pos 0, time 0s</button> (1st item in
+        playlist), <button data-url="/api/controlling-playback/seek?songPos=1&time=5">song pos 1, time 5s</button> (2nd
+        item in playlist, 5 sec)
+      </li>
+      <li>
+        <strong>seek-id:</strong>
+        <button data-url="/api/controlling-playback/seek-id">no param</button> (invalid),
+        <button data-url="/api/controlling-playback/seek-id?songId=176&time=5">song id 176, time 5s</button> (item id
+        176 in playlist, 5s)
+      </li>
+      <li>
+        <strong>play:</strong>
+        <button data-url="/api/controlling-playback/play">no param</button> (where the playlist was stopped),
+        <button data-url="/api/controlling-playback/play?songPos=0">song pos 0</button> (1st item in playlist)
+      </li>
+      <li>
+        <strong>play-id:</strong>
+        <button data-url="/api/controlling-playback/play-id">no param</button> (where the playlist was stopped),
+        <button data-url="/api/controlling-playback/play-id?songId=176">song id 176</button> (based on status)
+      </li>
+      <li>
+        <strong>seek-cur:</strong>
+        <button data-url="/api/controlling-playback/seek-cur">invalid</button>,
+        <button data-url="/api/controlling-playback/seek-cur?time=5">time 5s</button> (absolute),
+        <button data-url="/api/controlling-playback/seek-cur?time=%2B15">time +15s</button> (relative),
+        <button data-url="/api/controlling-playback/seek-cur?time=-15">time -15s</button> (relative)
+      </li>
+    </ul>
+  </body>
+  <script type="text/javascript">
+    $(() => {
+      $('body').on('click', (evt) => {
+        const target = $(evt.target);
+        if (!target.is('button')) return;
+        const dataUrl = target.data('url');
+        if (dataUrl) {
+          $.getJSON(dataUrl, (resp) => {
+            console.info(resp);
+          });
+        }
+      });
+
+      const socket = io();
+      const textarea = document.getElementById('status-idle');
+      textarea.value = '';
+      socket.on('idle', (data) => {
+        textarea.value = `${data.at}: ${data.subsystem}\n` + textarea.value;
+      });
+    });
+  </script>
+</html>
