@@ -29,12 +29,25 @@ body {
 /* TITLE */
 
 h2 {
-  margin: 2px 2px 30px 2px;
+  margin: 2px 2px 0 2px;
   padding: 3px 6px;
   font-size: 26px;
   font-weight: 100;
   background-color: black;
   color: #fff;
+}
+
+/* SEARCH */
+
+.external-search {
+  padding: 5px;
+  margin-top: 0;
+}
+
+.external-search a {
+  display: inline-block;
+  padding: 2px;
+  color: var(--fbc-blue-60);
 }
 
 /* JSON DATA */
@@ -81,6 +94,10 @@ h2 {
   color: darkred;
   padding: 0 5px 0 0;
   display: block;
+}
+
+.json-data li label::after {
+  content: ':';
 }
 
 .json-data li span {

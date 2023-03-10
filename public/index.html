@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="./scripts/vendor/lodash.4.17.21.min.js"></script>
     <script src="./scripts/vendor/dayjs.1.11.7.min.js"></script>
+    <script src="./scripts/vendor/dayjs.1.11.7.duration.min.js"></script>
+    <script src="./scripts/vendor/dayjs.1.11.7.relativeTime.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.3.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="styles/normalize.css" />
@@ -35,6 +37,14 @@
       <button class="action" id="controls-refresh">refresh</button>
     </div>
     <h2 class="current-song-name"></h2>
+    <p class="external-search">
+      Search:
+      <a data-href="https://www.google.com/search?q=%SEARCH%" target="_blank" class="search-provider">google</a>,
+      <a data-href="https://www.youtube.com/results?search_query=%SEARCH%" target="_blank" class="search-provider"
+        >youtube</a
+      >,
+      <a data-href="https://open.spotify.com/search/%SEARCH%" target="_blank" class="search-provider">spotify</a>
+    </p>
     <ul class="current-song json-data"></ul>
     <ul class="status json-data"></ul>
     <ul class="stats json-data"></ul>
