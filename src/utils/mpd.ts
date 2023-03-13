@@ -150,3 +150,22 @@ export function getCurrentSongName(obj: Record<string, any>) {
   text = text.replace(/\s+,\s+/g, ', ');
   return text;
 }
+
+export function getSongLocation(data: any) {
+  let location = ['local'];
+  const fileData = String(data.file);
+  const nameData = String(data.name);
+  if (fileData.startsWith('http')) {
+    location = ['online'];
+    if (nameData.includes(' Decennial Gothica')) {
+      location.push('Decennial Gothica');
+    }
+    if (fileData.includes('somafm.com')) {
+      location.push('SomaFM');
+      if (nameData.includes(': ')) {
+        location.push(nameData.split(': ')[0]);
+      }
+    }
+  }
+  return location.join(' - ');
+}

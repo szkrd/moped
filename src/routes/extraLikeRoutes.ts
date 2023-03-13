@@ -8,6 +8,14 @@ function POST_like(app: Express, path: string) {
   });
 }
 
+function GET_likes(app: Express, path: string) {
+  return app.get(path, async (req, res) => {
+    const songs = await like.getLikedSongs();
+    res.json({ songs });
+  });
+}
+
 export const extraLikeRoutes = {
   POST_like,
+  GET_likes,
 };
