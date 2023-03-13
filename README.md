@@ -3,6 +3,10 @@
 Moped is a minimal web interface for MPD that shows the current song playing,
 along with some basic controls. It is **NOT** a full featured client.
 
+It's just a quick hack for myself so that I can change the volume
+on the server and see what's playing from my phone (otherwise ssh
+with ncpmpcpp is the simplest and best way to access the server).
+
 ## ui
 
 ![screenshot](./docs/1678283224-firefox_8nDNQx4zUL.png)

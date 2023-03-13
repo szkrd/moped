@@ -1,3 +1,4 @@
+import { last } from 'lodash';
 import { Ack, IMpdError } from '../models/mpdResponse/error';
 import { parseIntSafe } from './number';
 import { camelCase, split } from './string';
@@ -113,3 +114,39 @@ export const parseMpdMessage = {
   asKeyValue: parseKeyValueMessage,
   asArray: parseArrayMessage,
 };
+
+function normalizeName(text: string) {
+  return String(text).trim().replace(/\s+/g, ' ');
+}
+
+export function getCurrentSongName(obj: Record<string, any>) {
+  if (obj === null || typeof obj !== 'object') return '';
+  let artist = '';
+  let title = '';
+  if (obj.title) {
+    title = normalizeName(obj.title);
+  } else if (obj.name) {
+    title = normalizeName(obj.name);
+    if (title === 'Klubr?di?') title = 'Klubrádió';
+  } else {
+    title = String(last((obj.file || '').split('/')) || '')
+      .replace(/^\d+/, '')
+      .replace(/^\s+-\s+/, '')
+      .replace(/\.\w+$/, '')
+      .trim();
+  }
+  if (obj.artist) {
+    artist = normalizeName(obj.artist);
+  }
+  let text = [artist, title].filter((x) => x.trim()).join(' - ');
+  const extRex = /\.(mp2|mp3|wav|mid|mpc|ape|cue|flac|ogg|ogm|opus|aac)$/;
+  text = text.replace(extRex, '');
+  if (!text.includes(' - ') && String(obj.file).match(extRex) && !String(obj.file).startsWith('http')) {
+    const parts = String(obj.file).split('/');
+    const parentDirMaybe = parts[parts.length - 2];
+    if (parentDirMaybe) text = [parentDirMaybe, text].join(' - ');
+  }
+  text = text.replace(/\s+(\?|!|\.)$/, '$1');
+  text = text.replace(/\s+,\s+/g, ', ');
+  return text;
+}

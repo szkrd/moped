@@ -1,6 +1,8 @@
 import { Express } from 'express';
+import { getCurrentSongName } from '../utils/mpd';
 import { MpdCommand } from '../models/mpdCommand';
 import { mpd } from '../modules/mpd';
+import { like } from '../modules/like';
 import { catchMpdError, thenSuccess } from '../utils/http';
 import { SchemaType, toSchema } from '../utils/schema';
 
@@ -11,15 +13,19 @@ function GET_clearError(app: Express, path: string) {
 }
 
 function GET_currentSong(app: Express, path: string) {
+  let ret: any;
   return app.get(path, (req, res) => {
     mpd
       .sendCommand(MpdCommand.CurrentSong)
       .then((resp) => {
-        res.json(
-          toSchema(resp, {
-            [SchemaType.Number]: ['id', 'pos', 'time', 'duration', 'track', 'disc'],
-          })
-        );
+        ret = toSchema(resp, {
+          [SchemaType.Number]: ['id', 'pos', 'time', 'duration', 'track', 'disc'],
+        });
+        Object.assign(ret, { formattedName: getCurrentSongName(ret) });
+        return like.isLiked(ret);
+      })
+      .then((liked) => {
+        res.json({ ...ret, liked });
       })
       .catch(catchMpdError(res));
   });

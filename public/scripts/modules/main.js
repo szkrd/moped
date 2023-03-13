@@ -1,4 +1,4 @@
-import { escapeHtml, getCurrentSongName } from './utils.js';
+import { escapeHtml } from './utils.js';
 
 const { dayjs } = window;
 dayjs.extend(window.dayjs_plugin_relativeTime);
@@ -85,9 +85,10 @@ function updateJsonDataUi(prefix, obj) {
 function refreshStats(subsystem = 'all') {
   if (['all', 'current-song'].includes(subsystem)) {
     getJSON('/api/status/current-song', (resp) => {
-      const title = getCurrentSongName(resp);
+      const title = resp.formattedName;
       statusData.currentSong = { ...resp, title };
       document.title = title || 'moped';
+      $('#controls-fav').toggleClass('selected', resp.liked);
       $('.current-song-name').text(title || '-');
       $('.external-search')[title ? 'show' : 'hide']();
       $('.search-provider').each((idx, el) => {

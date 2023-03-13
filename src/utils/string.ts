@@ -38,3 +38,17 @@ export function split(text: string, splitStr: string, all = false): string[] {
 export function stringOrUndefined(val: any): string | undefined {
   return [undefined, null, NaN].includes(val) ? undefined : String(val);
 }
+
+export const trimCut = (text: string, maxLen = 255) =>
+  String(text ?? '')
+    .trim()
+    .substring(0, maxLen)
+    .replace(/\s+/g, ' ');
+
+export const trimCutAll = (obj: Record<string, any>) => {
+  Object.keys(obj).forEach((key) => {
+    const val = obj[key];
+    if (typeof val === 'string') obj[key] = trimCut(val);
+  });
+  return obj;
+};

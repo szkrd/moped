@@ -11,11 +11,18 @@ button {
   background-color: lightgray;
   border-radius: 2px;
   border: 2px outset silver;
+  transition: all ease-out 0.2s;
 }
 
 button.selected {
-  background-color: silver;
+  background-color: gray;
+  color: lightgray;
   font-weight: bold;
+}
+
+button:active {
+  background-color: white;
+  border: 2px inset silver;
 }
 
 /* --------------------------------------------------------------- */
@@ -34,7 +41,7 @@ button.selected {
 h2 {
   margin: 2px 2px 0 2px;
   padding: 3px 6px;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 100;
   background-color: black;
   color: #fff;
@@ -136,4 +143,16 @@ h2 {
 
 body.loading .load-indicator {
   display: block;
+}
+
+/* RESPO */
+
+@media only screen and (max-width: 600px) {
+  button {
+    padding: 15px;
+  }
+
+  h2 {
+    padding: 8px 16px;
+  }
 }

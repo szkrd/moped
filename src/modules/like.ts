@@ -1,14 +1,10 @@
 import dayjs from 'dayjs';
+import { omit } from 'lodash';
+import { trimCutAll } from '../utils/string';
 import { dataAccess } from './dataAccess';
 import { log } from './log';
 
 const dbName = 'likes.json';
-
-const trimCut = (text: string) =>
-  String(text ?? '')
-    .trim()
-    .substring(0, 255)
-    .replace(/\s+/g, ' ');
 
 function normalizeSongData(data: any) {
   // let fileDomain = '';
@@ -16,22 +12,40 @@ function normalizeSongData(data: any) {
   //   const url = new URL(data.file);
   //   fileDomain = url.hostname;
   // }
-  return {
-    name: trimCut(data.name),
-    title: trimCut(data.title),
-    file: trimCut(data.file),
+  data = omit(trimCutAll(data), ['pos', 'duration', 'id', 'time', 'lastModified']);
+  const ret = {
+    ...data,
     at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
   };
+  return ret;
+}
+
+function checkSongObject(currentSong: any) {
+  if (
+    !currentSong ||
+    typeof currentSong !== 'object' ||
+    !currentSong.formattedName ||
+    !String(currentSong.formattedName).trim()
+  ) {
+    log.error('addLike failure, song has no formattedName');
+    return false;
+  }
+  return true;
 }
 
 async function addLike(currentSong: any) {
-  if (!currentSong.title || !String(currentSong.title).trim()) {
-    log.error('addLike failure, song has no title');
-    return;
-  }
-  await dataAccess.upsert(dbName, normalizeSongData(currentSong), (a, b) => a.title === b.title);
+  if (!checkSongObject(currentSong)) return false;
+  await dataAccess.upsert(dbName, normalizeSongData(currentSong), (a, b) => a.formattedName === b.formattedName);
+  return true;
+}
+
+async function isLiked(currentSong: any) {
+  if (!checkSongObject(currentSong)) return false;
+  const likedSongs = await dataAccess.read(dbName);
+  return likedSongs.findIndex((song: any) => song.formattedName === currentSong.formattedName) > -1;
 }
 
 export const like = {
   addLike,
+  isLiked,
 };
