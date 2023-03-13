@@ -9,11 +9,6 @@ const dbName = 'likes.json';
 const MAX_PAYLOAD_SIZE = 2048;
 
 function normalizeSongData(data: any) {
-  // let fileDomain = '';
-  // if (data.file && String(data.file).startsWith('http')) {
-  //   const url = new URL(data.file);
-  //   fileDomain = url.hostname;
-  // }
   data = omit(trimCutAll(data), ['pos', 'duration', 'id', 'time', 'lastModified']);
   if (JSON.stringify(data).length > MAX_PAYLOAD_SIZE) {
     throw new Error('Data overflow error!');
@@ -45,6 +40,10 @@ async function addLike(currentSong: any) {
   return true;
 }
 
+async function removeLike(id: number) {
+  await dataAccess.deleteById(dbName, id);
+}
+
 async function isLiked(currentSong: any) {
   if (!checkSongObject(currentSong)) return false;
   const likedSongs = await dataAccess.read(dbName);
@@ -59,6 +58,7 @@ async function getLikedSongs() {
 
 export const like = {
   addLike,
+  removeLike,
   isLiked,
   getLikedSongs,
 };

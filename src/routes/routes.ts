@@ -29,5 +29,6 @@ export function setupRoutes(app: Express) {
   controllingPlaybackRoutes.GET_playId(app, '/api/controlling-playback/play-id'); // ?songId
   controllingPlaybackRoutes.GET_seekCur(app, '/api/controlling-playback/seek-cur'); // ?time
   extraLikeRoutes.POST_like(app, '/api/extra/like'); // { ...currentSong }
+  extraLikeRoutes.DELETE_like(app, '/api/extra/like'); // { id }
   extraLikeRoutes.GET_likes(app, '/api/extra/likes');
 }

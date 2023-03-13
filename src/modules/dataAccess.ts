@@ -34,6 +34,14 @@ async function upsert(fileName: string, item: any, matcherFn: (a: any, b: any) =
   await write(fileName, data);
 }
 
+async function deleteById(fileName: string, id: number) {
+  const data = await read(fileName);
+  await write(
+    fileName,
+    data.filter((item: any) => item.id !== id)
+  );
+}
+
 function getNewId(data: any[]) {
   let lastId = 0;
   data.forEach((item) => {
@@ -47,4 +55,5 @@ export const dataAccess = {
   write,
   upsert,
   getNewId,
+  deleteById,
 };
