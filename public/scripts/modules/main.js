@@ -6,26 +6,42 @@ dayjs.extend(window.dayjs_plugin_duration);
 
 const SIO_DEBOUNCE = 1000;
 let loadCount = 0;
+const statusData = {};
 
 function changeLoadCount(n) {
   loadCount += n;
   $('body').toggleClass('loading', loadCount > 0);
 }
 
-function getJSON(url, onSuccess) {
+function getOrPostJSON(url, data, onSuccess) {
   onSuccess = onSuccess || _.noop;
   changeLoadCount(1);
-  $.getJSON(
+  const onSucc = (resp) => {
+    changeLoadCount(-1);
+    onSuccess(resp);
+  };
+  const onErr = (err) => {
+    changeLoadCount(-1);
+    console.log('Ajax error:', err);
+  };
+  if (data === null) return $.getJSON(url, onSucc, onErr);
+  return $.ajax({
+    type: 'POST',
     url,
-    (resp) => {
-      changeLoadCount(-1);
-      onSuccess(resp);
-    },
-    (err) => {
-      changeLoadCount(-1);
-      console.log('Ajax error:', err);
-    }
-  );
+    data: JSON.stringify(data),
+    success: onSucc,
+    error: onErr,
+    contentType: 'application/json',
+    dataType: 'json',
+  });
+}
+
+function postJSON(url, data, onSuccess) {
+  return getOrPostJSON(url, data, onSuccess);
+}
+
+function getJSON(url, onSuccess) {
+  return getOrPostJSON(url, null, onSuccess);
 }
 
 function updateJsonDataUi(prefix, obj) {
@@ -34,6 +50,7 @@ function updateJsonDataUi(prefix, obj) {
   const subTypeTime = ['playtime', 'uptime', 'elapsed', 'dbPlaytime'];
   const subTypeRelativeDate = ['at'];
   const html = [];
+  if (!obj.at) obj.at = Date.now();
   Object.keys(obj).forEach((key) => {
     const val = obj[key];
     let className = [typeof val];
@@ -69,6 +86,7 @@ function refreshStats(subsystem = 'all') {
   if (['all', 'current-song'].includes(subsystem)) {
     getJSON('/api/status/current-song', (resp) => {
       const title = getCurrentSongName(resp);
+      statusData.currentSong = { ...resp, title };
       document.title = title || 'moped';
       $('.current-song-name').text(title || '-');
       $('.external-search')[title ? 'show' : 'hide']();
@@ -80,6 +98,7 @@ function refreshStats(subsystem = 'all') {
   }
   if (['all', 'status'].includes(subsystem)) {
     getJSON('/api/status/status', (resp) => {
+      statusData.status = resp;
       updateJsonDataUi('status', resp);
       const vol = resp.volume;
       const roundedVol = Math.round(vol / 10);
@@ -88,8 +107,15 @@ function refreshStats(subsystem = 'all') {
     });
   }
   if (['all', 'stats'].includes(subsystem)) {
-    getJSON('/api/status/stats', (resp) => updateJsonDataUi('stats', resp));
+    getJSON('/api/status/stats', (resp) => {
+      statusData.stats = resp;
+      updateJsonDataUi('stats', resp);
+    });
   }
+}
+
+function likeOrDislikeCurrent() {
+  postJSON('/api/extra/like', statusData.currentSong);
 }
 
 function setupSocketIo() {
@@ -112,11 +138,15 @@ function onBodyClick(evt) {
   const target = $(evt.target);
   if (target.is('button.action')) {
     const dataUrl = target.data('api-call');
-    if (target.attr('id') === 'controls-refresh') {
+    const id = target.attr('id');
+    if (id === 'controls-refresh') {
       refreshStats();
     }
-    if (target.attr('id') === 'controls-volume') {
+    if (id === 'controls-volume') {
       refreshStats('status');
+    }
+    if (id === 'controls-fav') {
+      likeOrDislikeCurrent();
     }
     if (dataUrl) {
       getJSON(dataUrl);

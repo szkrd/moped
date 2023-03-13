@@ -27,3 +27,4 @@ jspm_packages/
 dist
 # ---
 !.vscode/settings.json
+/data/*.json

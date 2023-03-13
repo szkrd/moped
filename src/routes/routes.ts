@@ -1,5 +1,6 @@
 import { Express } from 'express';
 import { controllingPlaybackRoutes } from './controllingPlaybackRoutes';
+import { extraLikeRoutes } from './extraLikeRoutes';
 import { playbackOptionsRoutes } from './playbackOptionsRoutes';
 import { statusRoutes } from './statusRoutes';
 
@@ -27,4 +28,5 @@ export function setupRoutes(app: Express) {
   controllingPlaybackRoutes.GET_play(app, '/api/controlling-playback/play'); // ?songPos
   controllingPlaybackRoutes.GET_playId(app, '/api/controlling-playback/play-id'); // ?songId
   controllingPlaybackRoutes.GET_seekCur(app, '/api/controlling-playback/seek-cur'); // ?time
+  extraLikeRoutes.POST_like(app, '/api/extra/like'); // { ...currentSong }
 }
