@@ -4,6 +4,22 @@ body {
   height: 100%;
 }
 
+button {
+  padding: 10px;
+  display: block;
+  margin: 2px;
+  background-color: lightgray;
+  border-radius: 2px;
+  border: 2px outset silver;
+}
+
+button.selected {
+  background-color: silver;
+  font-weight: bold;
+}
+
+/* --------------------------------------------------------------- */
+
 /* CONTROLS */
 
 .controls {
@@ -11,19 +27,6 @@ body {
   border-radius: 3px;
   display: flex;
   flex-wrap: wrap;
-}
-
-.controls button {
-  padding: 10px;
-  display: block;
-  margin: 2px;
-  background-color: lightgray;
-  border-radius: 2px;
-}
-
-.controls button.selected {
-  color: white;
-  font-weight: bold;
 }
 
 /* TITLE */

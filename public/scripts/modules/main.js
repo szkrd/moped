@@ -71,7 +71,7 @@ function refreshStats(subsystem = 'all') {
       const title = getCurrentSongName(resp);
       document.title = title || 'moped';
       $('.current-song-name').text(title || '-');
-      $('.external-search')[title ? 'show' : 'hide'];
+      $('.external-search')[title ? 'show' : 'hide']();
       $('.search-provider').each((idx, el) => {
         $(el).attr('href', el.dataset.href.replace('%SEARCH%', encodeURIComponent(title)));
       });
