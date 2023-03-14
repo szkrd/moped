@@ -8,12 +8,38 @@ const SIO_DEBOUNCE = 1000;
 let loadCount = 0;
 const statusData = {};
 
+const htmlTemplates = {
+  songList: _.template(`
+    <ul class="song-list">
+      <% _.forEach(songs, (song) => { %>
+        <li>
+          <h3>
+            <span class="name"><%- song.formattedName %></span>
+            <span class="actions">
+              <button class="song-action-button" id="song-button-details">details</button>
+              <button class="song-action-button" id="song-button-remove" data-id="<%- song.id %>">remove</button>
+            </span>
+          </h3>
+          <table class="details" style="display:none">
+            <% _.forEach(_.omit(song, ['liked', 'formattedName', 'id']), (value, key) => { %>
+              <tr>
+                <td><label class="key"><%- key %>:</label></td>
+                <td><span class="value"><%- value %></span></td>
+              </tr>
+            <% }) %>
+          </table>
+        </li>
+      <% }) %>
+    </ul>
+  `),
+};
+
 function changeLoadCount(n) {
   loadCount += n;
   $('body').toggleClass('loading', loadCount > 0);
 }
 
-function getOrPostJSON(url, data, onSuccess) {
+function getOrPostJSON(url, method = 'POST', data, onSuccess) {
   onSuccess = onSuccess || _.noop;
   changeLoadCount(1);
   const onSucc = (resp) => {
@@ -26,7 +52,7 @@ function getOrPostJSON(url, data, onSuccess) {
   };
   if (data === null) return $.getJSON(url, onSucc, onErr);
   return $.ajax({
-    type: 'POST',
+    type: method,
     url,
     data: JSON.stringify(data),
     success: onSucc,
@@ -36,13 +62,11 @@ function getOrPostJSON(url, data, onSuccess) {
   });
 }
 
-function postJSON(url, data, onSuccess) {
-  return getOrPostJSON(url, data, onSuccess);
-}
-
-function getJSON(url, onSuccess) {
-  return getOrPostJSON(url, null, onSuccess);
-}
+const ajax = {
+  post: (url, data, onSuccess) => getOrPostJSON(url, 'POST', data, onSuccess),
+  get: (url, onSuccess) => getOrPostJSON(url, 'GET', null, onSuccess),
+  del: (url, data, onSuccess) => getOrPostJSON(url, 'DELETE', data, onSuccess),
+};
 
 function updateJsonDataUi(prefix, obj) {
   const deprecated = ['time'];
@@ -84,7 +108,7 @@ function updateJsonDataUi(prefix, obj) {
 
 function refreshStats(subsystem = 'all') {
   if (['all', 'current-song'].includes(subsystem)) {
-    getJSON('/api/status/current-song', (resp) => {
+    ajax.get('/api/status/current-song', (resp) => {
       const title = resp.formattedName;
       statusData.currentSong = { ...resp, title };
       document.title = title || 'moped';
@@ -98,7 +122,7 @@ function refreshStats(subsystem = 'all') {
     });
   }
   if (['all', 'status'].includes(subsystem)) {
-    getJSON('/api/status/status', (resp) => {
+    ajax.get('/api/status/status', (resp) => {
       statusData.status = resp;
       updateJsonDataUi('status', resp);
       const vol = resp.volume;
@@ -108,15 +132,15 @@ function refreshStats(subsystem = 'all') {
     });
   }
   if (['all', 'stats'].includes(subsystem)) {
-    getJSON('/api/status/stats', (resp) => {
+    ajax.get('/api/status/stats', (resp) => {
       statusData.stats = resp;
       updateJsonDataUi('stats', resp);
     });
   }
 }
 
-function likeOrDislikeCurrent() {
-  postJSON('/api/extra/like', statusData.currentSong);
+function likeCurrentSong() {
+  ajax.post('/api/extra/like', statusData.currentSong, refreshFavorites);
 }
 
 function setupSocketIo() {
@@ -135,22 +159,58 @@ function setupSocketIo() {
   );
 }
 
+function refreshFavorites() {
+  $('#tab-page-favorites').html('...').show();
+  ajax.get('/api/extra/likes', (resp) => {
+    $('#tab-page-favorites').html(htmlTemplates.songList(resp));
+  });
+}
+
+function selectTab(name = 'stats') {
+  $('button.tab-button').removeClass('selected');
+  $('.tab-page').hide();
+  if (name === 'stats') {
+    $('#tab-button-stats').addClass('selected');
+    refreshStats();
+    $('#tab-page-stats').show();
+  }
+  if (name === 'favorites') {
+    $('#tab-button-favorites').addClass('selected');
+    refreshFavorites();
+    $('#tab-page-favorites').show();
+  }
+}
+
 function onBodyClick(evt) {
   const target = $(evt.target);
+  const id = target.attr('id');
   if (target.is('button.action')) {
     const dataUrl = target.data('api-call');
-    const id = target.attr('id');
-    if (id === 'controls-refresh') {
-      refreshStats();
-    }
     if (id === 'controls-volume') {
       refreshStats('status');
     }
     if (id === 'controls-fav') {
-      likeOrDislikeCurrent();
+      likeCurrentSong();
     }
     if (dataUrl) {
-      getJSON(dataUrl);
+      ajax.get(dataUrl);
+    }
+  }
+  if (target.is('button.tab-button')) {
+    if (id === 'tab-button-stats') {
+      selectTab('stats');
+    }
+    if (id === 'tab-button-favorites') {
+      selectTab('favorites');
+    }
+  }
+  if (target.is('button.song-action-button')) {
+    if (id === 'song-button-details') {
+      target.closest('li').find('table').toggle();
+    }
+    if (id === 'song-button-remove') {
+      const id = target.data('id');
+      ajax.del('/api/extra/like', { id }, refreshFavorites);
     }
   }
 }

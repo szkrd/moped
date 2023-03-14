@@ -34,7 +34,6 @@
       <button class="action" data-api-call="/api/controlling-playback/next">next</button>
       <button class="action" data-api-call="/api/controlling-playback/pause">pause</button>
       <button class="action" data-api-call="/api/controlling-playback/play">play</button>
-      <button class="action" id="controls-refresh">refresh</button>
       <button class="action" id="controls-fav">like</button>
     </div>
     <h2 class="current-song-name"></h2>
@@ -46,10 +45,17 @@
       >,
       <a data-href="https://open.spotify.com/search/%SEARCH%" target="_blank" class="search-provider">spotify</a>
     </p>
-    <ul class="current-song json-data"></ul>
-    <ul class="status json-data"></ul>
-    <ul class="stats json-data"></ul>
-    <ul class="idle json-data"></ul>
+    <div class="tab-buttons">
+      <button id="tab-button-stats" class="tab-button selected">stats</button>
+      <button id="tab-button-favorites" class="tab-button">favorites</button>
+    </div>
+    <div class="tab-page" id="tab-page-stats">
+      <ul class="current-song json-data"></ul>
+      <ul class="status json-data"></ul>
+      <ul class="stats json-data"></ul>
+      <ul class="idle json-data"></ul>
+    </div>
+    <div class="tab-page" id="tab-page-favorites" style="display: none"></div>
     <script type="module">
       import main from './scripts/modules/main.js';
       $(main);

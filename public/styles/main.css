@@ -60,6 +60,30 @@ h2 {
   color: var(--fbc-blue-60);
 }
 
+/* TAB BUTTONS */
+
+.tab-buttons {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid lightgray;
+  padding: 0 6px;
+}
+
+.tab-buttons button {
+  border-bottom: 0;
+  margin: 0;
+  background-color: lightgray;
+  position: relative;
+  z-index: 1;
+  top: 2px;
+  margin-left: -2px;
+}
+
+.tab-buttons button.selected {
+  background-color: white;
+  color: black;
+}
+
 /* JSON DATA */
 
 .json-data {
@@ -128,6 +152,30 @@ h2 {
   font-weight: bold;
 }
 
+/* SONG LIST */
+
+ul.song-list {
+  padding-left: 20px;
+}
+
+.song-list h3 {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: normal;
+}
+
+.song-list .actions {
+  display: flex;
+  font-size: 16px;
+}
+
+.song-list .details label {
+  font-weight: bold;
+}
+
 /* LOADER */
 
 .load-indicator {
@@ -154,5 +202,16 @@ body.loading .load-indicator {
 
   h2 {
     padding: 8px 16px;
+  }
+
+  .song-list h3 {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .song-list .actions {
+    width: calc(100% - 5px);
+    margin: 2px 0 5px 0;
+    justify-content: flex-end;
   }
 }

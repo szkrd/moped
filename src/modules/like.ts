@@ -9,7 +9,7 @@ const dbName = 'likes.json';
 const MAX_PAYLOAD_SIZE = 2048;
 
 function normalizeSongData(data: any) {
-  data = omit(trimCutAll(data), ['pos', 'duration', 'id', 'time', 'lastModified']);
+  data = omit(trimCutAll(data), ['pos', 'duration', 'id', 'time', 'lastModified', 'liked']);
   if (JSON.stringify(data).length > MAX_PAYLOAD_SIZE) {
     throw new Error('Data overflow error!');
   }
