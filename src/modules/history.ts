@@ -14,6 +14,8 @@ async function addCurrentSongToHistory() {
   const resp = await mpd.sendCommand(MpdCommand.CurrentSong);
   const song = omit(status.normalizeCurrentSong(resp), ['time', 'duration', 'pos', 'lastModified']);
   trimCutAll(song);
+  if (!song.formattedName) return; // no valid name, probably the player stopped
+
   song.location = getSongLocation(song);
   song.at = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
