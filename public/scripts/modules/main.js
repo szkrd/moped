@@ -16,8 +16,8 @@ const htmlTemplates = {
           <h3>
             <span class="name"><%- song.formattedName %></span>
             <span class="actions">
-              <button class="song-action-button" id="song-button-details">details</button>
-              <button class="song-action-button" id="song-button-remove" data-id="<%- song.id %>">remove</button>
+              <button class="song-action-button song-button-details">details</button>
+              <button class="song-action-button song-button-remove" data-id="<%- song.id %>">remove</button>
             </span>
           </h3>
           <table class="details" style="display:none">
@@ -205,10 +205,10 @@ function onBodyClick(evt) {
     }
   }
   if (target.is('button.song-action-button')) {
-    if (id === 'song-button-details') {
+    if (target.hasClass('song-button-details')) {
       target.closest('li').find('table').toggle();
     }
-    if (id === 'song-button-remove') {
+    if (target.hasClass('song-button-remove')) {
       const id = target.data('id');
       ajax.del('/api/extra/like', { id }, refreshFavorites);
     }
