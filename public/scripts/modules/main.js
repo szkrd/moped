@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+import { htmlTemplates } from './htmlTemplates.js';
 
 const { dayjs } = window;
 dayjs.extend(window.dayjs_plugin_relativeTime);
@@ -7,39 +8,22 @@ dayjs.extend(window.dayjs_plugin_duration);
 const SIO_DEBOUNCE = 1000;
 let loadCount = 0;
 const statusData = {};
+let currentHistory = [];
 
-const htmlTemplates = {
-  songList: _.template(`
-    <ul class="song-list">
-      <% _.forEach(songs, (song) => { %>
-        <li>
-          <h3>
-            <span class="name"><%- song.formattedName %></span>
-            <span class="actions">
-              <button class="song-action-button song-button-details">details</button>
-              <button class="song-action-button song-button-remove" data-id="<%- song.id %>">remove</button>
-            </span>
-          </h3>
-          <table class="details" style="display:none">
-            <% _.forEach(_.omit(song, ['liked', 'formattedName', 'id']), (value, key) => { %>
-              <tr>
-                <td><label class="key"><%- key %>:</label></td>
-                <td><span class="value"><%- value %></span></td>
-              </tr>
-            <% }) %>
-          </table>
-        </li>
-      <% }) %>
-    </ul>
-  `),
-};
-
+/**
+ * Increase or decrease the global in progress counter,
+ * show loading message in top corner if an ajax call is in progress.
+ */
 function changeLoadCount(n) {
   loadCount += n;
   $('body').toggleClass('loading', loadCount > 0);
 }
 
-function getOrPostJSON(url, method = 'POST', data, onSuccess) {
+/**
+ * Thin wrapper around $.ajax: handles load count
+ * and logs errors to the console.
+ */
+function _getOrPostJSON(url, method = 'POST', data, onSuccess) {
   onSuccess = onSuccess || _.noop;
   changeLoadCount(1);
   const onSucc = (resp) => {
@@ -63,11 +47,14 @@ function getOrPostJSON(url, method = 'POST', data, onSuccess) {
 }
 
 const ajax = {
-  post: (url, data, onSuccess) => getOrPostJSON(url, 'POST', data, onSuccess),
-  get: (url, onSuccess) => getOrPostJSON(url, 'GET', null, onSuccess),
-  del: (url, data, onSuccess) => getOrPostJSON(url, 'DELETE', data, onSuccess),
+  post: (url, data, onSuccess) => _getOrPostJSON(url, 'POST', data, onSuccess),
+  get: (url, onSuccess) => _getOrPostJSON(url, 'GET', null, onSuccess),
+  del: (url, data, onSuccess) => _getOrPostJSON(url, 'DELETE', data, onSuccess),
 };
 
+/**
+ * Renders the stats tab.
+ */
 function updateJsonDataUi(prefix, obj) {
   const deprecated = ['time'];
   const subTypeDate = ['dbUpdate'];
@@ -106,6 +93,10 @@ function updateJsonDataUi(prefix, obj) {
   $(`ul.${prefix}`).html(html.join(''));
 }
 
+/**
+ * Downloads all stats (stats, status and current-song info)
+ * and updates the UI (stats section, button states).
+ */
 function refreshStats(subsystem = 'all') {
   if (['all', 'current-song'].includes(subsystem)) {
     ajax.get('/api/status/current-song', (resp) => {
@@ -116,7 +107,9 @@ function refreshStats(subsystem = 'all') {
       $('.current-song-name').text(title || '-');
       $('.external-search')[title ? 'show' : 'hide']();
       $('.search-provider').each((idx, el) => {
-        $(el).attr('href', el.dataset.href.replace('%SEARCH%', encodeURIComponent(title)));
+        if (el.dataset.href) {
+          $(el).attr('href', el.dataset.href.replace('%SEARCH%', encodeURIComponent(title)));
+        }
       });
       updateJsonDataUi('current-song', resp);
     });
@@ -139,10 +132,10 @@ function refreshStats(subsystem = 'all') {
   }
 }
 
-function likeCurrentSong() {
-  ajax.post('/api/extra/like', statusData.currentSong, refreshFavorites);
-}
-
+/**
+ * Initializes SocketIO and subscribes to MPD
+ * idle messages (which are rather trigger happy).
+ */
 function setupSocketIo() {
   const socket = window.io();
   socket.on(
@@ -151,6 +144,7 @@ function setupSocketIo() {
       updateJsonDataUi('idle', data);
       if (['player', 'playlist'].includes(data.subsystem)) {
         refreshStats('current-song');
+        refreshHistory();
       }
       if (['mixer'].includes(data.subsystem)) {
         refreshStats('status');
@@ -159,13 +153,31 @@ function setupSocketIo() {
   );
 }
 
-function refreshFavorites() {
-  $('#tab-page-favorites').html('...').show();
-  ajax.get('/api/extra/likes', (resp) => {
-    $('#tab-page-favorites').html(htmlTemplates.songList(resp));
+/**
+ * Downloads favorites, updates the  favorites tab.
+ */
+function refreshFavorites(show = false) {
+  const el = $('#tab-page-favorites').html('...');
+  if (show === true) el.show();
+  ajax.get('/api/extra/likes', (resp) => el.html(htmlTemplates.songList(resp)));
+}
+
+/**
+ * Downloads history, updates the  history tab.
+ */
+function refreshHistory(show = false) {
+  const el = $('#tab-page-history').html('...');
+  if (show === true) el.show();
+  ajax.get('/api/extra/history', (resp) => {
+    currentHistory = resp.songs;
+    el.html(htmlTemplates.songList(resp));
   });
 }
 
+/**
+ * Unselect all tab switcher buttons, mark selected,
+ * toggle visible page div.
+ */
 function selectTab(name = 'stats') {
   $('button.tab-button').removeClass('selected');
   $('.tab-page').hide();
@@ -176,26 +188,34 @@ function selectTab(name = 'stats') {
   }
   if (name === 'favorites') {
     $('#tab-button-favorites').addClass('selected');
-    refreshFavorites();
-    $('#tab-page-favorites').show();
+    refreshFavorites(true);
+  }
+  if (name === 'history') {
+    $('#tab-button-history').addClass('selected');
+    refreshHistory(true);
   }
 }
 
+/**
+ * Sets up all common clickhandlers (mostly the buttons).
+ */
 function onBodyClick(evt) {
   const target = $(evt.target);
   const id = target.attr('id');
+  // topmost control buttons
   if (target.is('button.action')) {
     const dataUrl = target.data('api-call');
     if (id === 'controls-volume') {
       refreshStats('status');
     }
     if (id === 'controls-fav') {
-      likeCurrentSong();
+      ajax.post('/api/extra/like', statusData.currentSong, refreshFavorites);
     }
     if (dataUrl) {
       ajax.get(dataUrl);
     }
   }
+  // tab switcher buttons (stats, favs, history)
   if (target.is('button.tab-button')) {
     if (id === 'tab-button-stats') {
       selectTab('stats');
@@ -203,7 +223,11 @@ function onBodyClick(evt) {
     if (id === 'tab-button-favorites') {
       selectTab('favorites');
     }
+    if (id === 'tab-button-history') {
+      selectTab('history');
+    }
   }
+  // buttons in the song list
   if (target.is('button.song-action-button')) {
     if (target.hasClass('song-button-details')) {
       target.closest('li').find('table').toggle();
@@ -212,22 +236,38 @@ function onBodyClick(evt) {
       const id = target.data('id');
       ajax.del('/api/extra/like', { id }, refreshFavorites);
     }
+    if (target.hasClass('song-button-like-from-history')) {
+      const id = parseInt(target.data('id'), 10);
+      const match = currentHistory.find((item) => item.id === id);
+      if (match) {
+        ajax.post('/api/extra/like', match, refreshFavorites);
+      }
+    }
+  }
+  // the song list list item text
+  if (target.is('.song-list-song-name') || target.closest('.song-list-song-name').length > 0) {
+    target.closest('li').find('table').toggle();
   }
 }
 
-function refreshRealitveTimes() {
+/**
+ * Hunts the dom for "at" values and translates them to relative time.
+ */
+function refreshRelativeTimes() {
   setInterval(() => {
     $('span[data-key="at"]').each((idx, el) => {
       el = $(el);
       const val = el.data('value');
-      if (/^\d+$/.test(val)) el.text(dayjs(val).fromNow() + ` (${val})`);
+      el.text(dayjs(val).fromNow() + ` (${val})`);
     });
   }, 1000);
 }
 
+// ---
+
 export default function main() {
   $('body').on('click', onBodyClick);
-  refreshRealitveTimes();
+  refreshRelativeTimes();
   setupSocketIo();
   refreshStats();
 }

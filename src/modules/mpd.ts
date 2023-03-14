@@ -20,8 +20,8 @@ interface IQueuedMessage {
   inProgress?: boolean;
   finished?: boolean;
   error?: IMpdError;
-  onSuccess?: (response: string) => void;
-  onError?: (err: IMpdError) => void;
+  onSuccess?: Array<(response: string) => void>;
+  onError?: Array<(err: IMpdError) => void>;
   rawResponse?: string;
 }
 
@@ -64,6 +64,20 @@ function receive(data: string) {
   current.rawResponse += data;
 }
 
+function addToMessageQueue(msg: IQueuedMessage) {
+  const idx = messageQueue.findIndex(
+    (queued) => queued.message === msg.message && !queued.finished && !queued.inProgress
+  );
+  if (idx === -1) {
+    messageQueue.push(msg);
+  } else {
+    const onSuccess = messageQueue[idx].onSuccess ?? [];
+    const onError = messageQueue[idx].onError ?? [];
+    if (msg.onSuccess && msg.onSuccess.length > 0) messageQueue[idx].onSuccess = onSuccess.concat(msg.onSuccess);
+    if (msg.onError && msg.onError.length > 0) messageQueue[idx].onError = onError.concat(msg.onError);
+  }
+}
+
 function sendCommand(command: MpdCommand, args: string | undefined | string[] = []) {
   if (!Array.isArray(args)) args = [args];
   // remove undefineds
@@ -75,17 +89,21 @@ function sendCommand(command: MpdCommand, args: string | undefined | string[] = 
   const message = [command, ...quotedArgs].join(' ') + '\n';
   log.info(`[mpd] sending command: ${message.trim()}`);
   return new Promise<string>((resolve, reject) => {
-    messageQueue.push({
+    addToMessageQueue({
       command,
       message,
-      onSuccess: (resp: string) => {
-        log.info('[mpd] on success:', resp || 'no data.');
-        resolve(resp);
-      },
-      onError: (err: IMpdError) => {
-        log.info('[mpd] on error:', err);
-        reject(err);
-      },
+      onSuccess: [
+        (resp: string) => {
+          log.info('[mpd] on success:', resp || 'no data.');
+          resolve(resp);
+        },
+      ],
+      onError: [
+        (err: IMpdError) => {
+          log.info('[mpd] on error:', err);
+          reject(err);
+        },
+      ],
     });
   });
 }
@@ -106,10 +124,10 @@ function processMessageQueue() {
   const finishedItem = messageQueue.find((item) => item.finished);
   if (finishedItem) {
     if (finishedItem.onSuccess && !finishedItem.error) {
-      finishedItem.onSuccess(finishedItem.rawResponse ?? '');
+      finishedItem.onSuccess.forEach((fn) => fn(finishedItem.rawResponse ?? ''));
     }
     if (finishedItem.onError && finishedItem.error) {
-      finishedItem.onError(finishedItem.error);
+      finishedItem.onError.forEach((fn) => fn(finishedItem.error));
     }
   }
   messageQueue = messageQueue.filter((item) => !item.finished);

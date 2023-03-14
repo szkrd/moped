@@ -9,7 +9,7 @@ with ncpmpcpp is the simplest and best way to access the server).
 
 ## ui
 
-![screenshot](./docs/1678283224-firefox_8nDNQx4zUL.png)
+![screenshot](./docs/screenshot-02.png)
 
 ## notes
 

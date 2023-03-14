@@ -5,6 +5,7 @@ import { mpd } from '../modules/mpd';
 import { like } from '../modules/like';
 import { catchMpdError, thenSuccess } from '../utils/http';
 import { SchemaType, toSchema } from '../utils/schema';
+import { status } from '../modules/status';
 
 function GET_clearError(app: Express, path: string) {
   return app.get(path, (req, res) => {
@@ -18,10 +19,7 @@ function GET_currentSong(app: Express, path: string) {
     mpd
       .sendCommand(MpdCommand.CurrentSong)
       .then((resp) => {
-        ret = toSchema(resp, {
-          [SchemaType.Number]: ['id', 'pos', 'time', 'duration', 'track', 'disc'],
-        });
-        Object.assign(ret, { formattedName: getCurrentSongName(ret) });
+        ret = status.normalizeCurrentSong(resp);
         return like.isLiked(ret);
       })
       .then((liked) => {

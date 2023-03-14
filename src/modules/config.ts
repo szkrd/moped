@@ -7,6 +7,7 @@ export const config = {
   port: parseIntSafe(process.env.PORT, 8080),
   logLevel: parseIntSafe(process.env.LOG_LEVEL, 0),
   publicDir: process.env.PUBLIC_DIR ?? '',
+  maxHistory: parseIntSafe(process.env.MAX_HISTORY, 20),
   mpd: {
     host: process.env.MPD_HOST ?? '127.0.0.1',
     port: parseIntSafe(process.env.MPD_PORT, 6600),

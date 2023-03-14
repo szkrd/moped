@@ -9,6 +9,7 @@ import { mpd } from './modules/mpd';
 import { mpdIdler } from './modules/mpdIdler';
 import { setupRoutes } from './routes/routes';
 import { onExit } from './utils/process';
+import { history } from './modules/history';
 
 // mpd setup and teardown
 mpd.connect();
@@ -54,11 +55,18 @@ const server = app.listen(config.port, config.host, () => {
 const io = new SocketIO(server);
 io.on('connection', (socket) => {
   log.info('[socketio] client connected');
+  // socketio broadcaster
   mpdIdler.addListener(
     debounce((subsystem, at) => {
       io.emit('idle', { subsystem, at }); // broadcast to everyone
       log.info(`[socketio] idle message for subsystem "${subsystem}"`);
     }, 1000)
+  );
+  // history logger
+  mpdIdler.addListener(
+    debounce((subsystem, at) => {
+      if (['playlist', 'player'].includes(subsystem)) history.addCurrentSongToHistory();
+    }, 2000)
   );
   socket.on('disconnect', () => {
     log.info('[socketio] client disconnected');

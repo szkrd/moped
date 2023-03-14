@@ -98,7 +98,7 @@ h2 {
   line-height: 18px;
   min-height: 18px;
   opacity: 0.2;
-  filter: grayscale(1) sepia(1) brightness(0.2);
+  filter: grayscale(1) sepia(1) brightness(0);
 }
 
 .json-data:hover {
@@ -128,6 +128,7 @@ h2 {
   color: darkred;
   padding: 0 5px 0 0;
   display: block;
+  font-weight: bold;
 }
 
 .json-data li label::after {
@@ -155,7 +156,17 @@ h2 {
 /* SONG LIST */
 
 ul.song-list {
-  padding-left: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 3px;
+}
+
+ul.song-list li {
+  padding: 5px;
+}
+
+ul.song-list li.even {
+  background-color: #eee;
 }
 
 .song-list h3 {
@@ -167,13 +178,37 @@ ul.song-list {
   font-weight: normal;
 }
 
+.song-list h3 .name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-grow: 1;
+  cursor: default;
+}
+
+.song-list h3 .name:hover {
+  text-decoration: underline;
+}
+
 .song-list .actions {
   display: flex;
   font-size: 16px;
 }
 
+.song-list .details {
+  margin-bottom: 10px;
+}
+
 .song-list .details label {
   font-weight: bold;
+}
+
+#tab-page-history .song-button-remove {
+  display: none;
+}
+
+#tab-page-favorites .song-button-like-from-history {
+  display: none;
 }
 
 /* LOADER */

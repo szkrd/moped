@@ -34,6 +34,13 @@ async function upsert(fileName: string, item: any, matcherFn: (a: any, b: any) =
   await write(fileName, data);
 }
 
+async function insert(fileName: string, item: any, onBeforeWrite: (data: any[]) => void) {
+  const data = await read(fileName);
+  data.push({ ...item, id: getNewId(data) });
+  if (onBeforeWrite) onBeforeWrite(data);
+  await write(fileName, data);
+}
+
 async function deleteById(fileName: string, id: number) {
   const data = await read(fileName);
   await write(
@@ -53,6 +60,7 @@ function getNewId(data: any[]) {
 export const dataAccess = {
   read,
   write,
+  insert,
   upsert,
   getNewId,
   deleteById,
