@@ -8,11 +8,15 @@ const getFileName = (fileName: string) => path.join(__dirname, `../../data/${fil
 
 async function read(fileName: string) {
   fileName = getFileName(fileName);
-  if (existsSync(fileName)) {
-    const text: string = await readFile(fileName, 'utf-8');
-    return JSON.parse(String(text));
+  if (!existsSync(fileName)) return [];
+  const text: string = await readFile(fileName, 'utf-8');
+  let ret = [];
+  try {
+    ret = JSON.parse(String(text));
+  } catch (err) {
+    log.error(`Error parsing "${fileName}"!`, err);
   }
-  return [];
+  return ret;
 }
 
 async function write(fileName: string, data: any[]) {

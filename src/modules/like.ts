@@ -28,7 +28,7 @@ function checkSongObject(currentSong: any) {
     !currentSong.formattedName ||
     !String(currentSong.formattedName).trim()
   ) {
-    log.error('addLike failure, song has no formattedName');
+    log.error('Song object has no formattedName', currentSong);
     return false;
   }
   return true;
