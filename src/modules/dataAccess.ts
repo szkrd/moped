@@ -13,7 +13,7 @@ async function read(fileName: string) {
   try {
     ret = JSON.parse(String(text));
   } catch (err) {
-    log.error(`Error parsing "${fileName}"!`, err);
+    log.error(`[dataAccess] Error parsing "${fileName}"!`, err);
   }
   return ret;
 }
@@ -27,11 +27,11 @@ async function upsert(fileName: string, item: any, matcherFn: (a: any, b: any) =
   matcherFn = matcherFn ?? ((a: any, b: any) => a.id === (b.id ?? -1));
   const idx = data.findIndex((el: any) => matcherFn(el, item));
   if (idx === -1) {
-    log.info(`Inserting new data to "${fileName}"`);
+    log.info(`[dataAccess] Inserting new data to "${fileName}"`);
     data.push({ ...item, id: getNewId(data) });
   }
   if (idx >= 0) {
-    log.info(`Updating existing data in "${fileName}"`);
+    log.info(`[dataAccess] Updating existing data in "${fileName}"`);
     Object.assign(data[idx], item);
   }
   await write(fileName, data);

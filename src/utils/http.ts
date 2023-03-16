@@ -13,7 +13,7 @@ export function invalidQueryParamError(res: Response, field: string | string[]) 
 export function thenSuccess(res: Response) {
   return (data: string) => {
     data = String(data).trim();
-    if (data) log.warn('Unexpected non empty response will be treated as success.');
+    if (data) log.warn('[utils/http] Unexpected non empty response will be treated as success.');
     res.status(200).json({ success: true });
   };
 }

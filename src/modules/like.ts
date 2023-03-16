@@ -30,7 +30,7 @@ function checkSongObject(currentSong: any) {
     !String(currentSong.formattedName).trim()
   ) {
     if (Object.keys(currentSong).length > 1) {
-      log.error('Song object has no formattedName', currentSong);
+      log.error('[like] Song object has no formattedName', currentSong);
     }
     return false;
   }
