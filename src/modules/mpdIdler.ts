@@ -3,6 +3,8 @@ import { createConnection, Socket } from 'node:net';
 import { config } from './config';
 import { log } from './log';
 
+const RECONNECT_WAIT = 10 * 1000;
+
 type TListener = (name: TSubsystemNames, at: number) => void;
 type TSubsystemNames =
   | 'database' // The song database has been modified after update.
@@ -64,10 +66,11 @@ function connect() {
     socket.write('idle\n');
   });
   socket.on('close', function () {
-    log.info('[mpd-idle] socket close');
+    log.info(`[mpd-idle] socket close, retry in: ${RECONNECT_WAIT / 1000}s`);
+    setTimeout(() => socket.connect({ port, host }), RECONNECT_WAIT);
   });
   socket.on('error', (err) => {
-    log.error('[mpd-idle] socket error', err);
+    log.error('[mpd-idle] socket error:', err);
   });
   processQueue();
 }

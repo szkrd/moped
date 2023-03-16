@@ -7,6 +7,8 @@ import { ellipsisLine } from '../utils/string';
 import { config } from './config';
 import { log } from './log';
 
+const RECONNECT_WAIT = 10 * 1000;
+
 /** Message queue process interval */
 const QUEUE_TIMEOUT = 1000;
 
@@ -159,7 +161,8 @@ function connect() {
     receive(data.toString());
   });
   socket.on('close', function () {
-    log.info('[mpd] socket close');
+    log.info(`[mpd] socket close, retry in: ${RECONNECT_WAIT / 1000}s`);
+    setTimeout(() => socket.connect({ port, host }), RECONNECT_WAIT);
   });
   socket.on('error', (err) => {
     log.error('[mpd] socket error', err);
