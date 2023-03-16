@@ -1,5 +1,4 @@
 import { Express } from 'express';
-import { getCurrentSongName } from '../utils/mpd';
 import { MpdCommand } from '../models/mpdCommand';
 import { mpd } from '../modules/mpd';
 import { like } from '../modules/like';

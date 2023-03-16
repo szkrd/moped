@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { uniq } from 'lodash';
 import { createConnection, Socket } from 'node:net';
 import { config } from './config';

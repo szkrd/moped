@@ -42,7 +42,6 @@ export function split(text: string, splitStr: string, all = false): string[] {
   return [text.substring(0, idx), text.substring(idx + splitStr.length)];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function stringOrUndefined(val: any): string | undefined {
   return [undefined, null, NaN].includes(val) ? undefined : String(val);
 }

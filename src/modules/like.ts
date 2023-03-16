@@ -11,7 +11,8 @@ const MAX_PAYLOAD_SIZE = 2048;
 function normalizeSongData(data: any) {
   data = omit(trimCutAll(data), ['pos', 'duration', 'id', 'time', 'lastModified', 'liked']);
   if (JSON.stringify(data).length > MAX_PAYLOAD_SIZE) {
-    throw new Error('Data overflow error!');
+    log.error('[like] Data overflow error!');
+    return false;
   }
   const ret = {
     ...data,
@@ -38,7 +39,9 @@ function checkSongObject(currentSong: any) {
 
 async function addLike(currentSong: any) {
   if (!checkSongObject(currentSong)) return false;
-  await dataAccess.upsert(dbName, normalizeSongData(currentSong), (a, b) => a.formattedName === b.formattedName);
+  const data = normalizeSongData(currentSong);
+  if (!data) return false;
+  await dataAccess.upsert(dbName, data, (a, b) => a.formattedName === b.formattedName);
   return true;
 }
 

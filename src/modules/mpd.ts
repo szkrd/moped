@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createConnection, Socket } from 'node:net';
 import { MpdCommand } from '../models/mpdCommand';
 import { IMpdError } from '../models/mpdResponse/error';
@@ -76,6 +75,7 @@ function addToMessageQueue(msg: IQueuedMessage) {
   if (idx === -1) {
     messageQueue.push(msg);
   } else {
+    log.info(`[mpd] reusing existing queued item for cmd "${msg.command}"`);
     const onSuccess = messageQueue[idx].onSuccess ?? [];
     const onError = messageQueue[idx].onError ?? [];
     if (msg.onSuccess && msg.onSuccess.length > 0) messageQueue[idx].onSuccess = onSuccess.concat(msg.onSuccess);

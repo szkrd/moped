@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { parseBoolean, parseBooleanOrOneshot } from './boolean';
 import { parseKeyValueMessage } from './mpd';
 import { parseIntSafe } from './number';
