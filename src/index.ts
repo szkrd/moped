@@ -19,6 +19,13 @@ onExit(() => {
   mpdIdler.disconnect();
 });
 
+// history logger (one per application)
+mpdIdler.addListener(
+  debounce((subsystem) => {
+    if (['playlist', 'player'].includes(subsystem)) history.addCurrentSongToHistory();
+  }, 2000)
+);
+
 // fire up express
 const app = express();
 app.use(express.json());
@@ -51,24 +58,21 @@ const server = app.listen(config.port, config.host, () => {
   log.info(`[express] express listening on ${host}:${port}`);
 });
 
-// add socketio
+// add socketio, broadcast subsystem changes to everyone
 const io = new SocketIO(server);
+let clientCount = 0;
+let sioIdleListener: undefined | (() => void);
+const onSubsystemChange = debounce((subsystem, at) => {
+  io.emit('idle', { subsystem, at }); // broadcast to everyone
+  log.info(`[socketio] idle message for subsystem "${subsystem}"`);
+}, 1000);
 io.on('connection', (socket) => {
-  log.info('[socketio] client connected');
-  // socketio broadcaster
-  mpdIdler.addListener(
-    debounce((subsystem, at) => {
-      io.emit('idle', { subsystem, at }); // broadcast to everyone
-      log.info(`[socketio] idle message for subsystem "${subsystem}"`);
-    }, 1000)
-  );
-  // history logger
-  mpdIdler.addListener(
-    debounce((subsystem, at) => {
-      if (['playlist', 'player'].includes(subsystem)) history.addCurrentSongToHistory();
-    }, 2000)
-  );
+  clientCount++;
+  log.info(`[socketio] client connected, client count is ${clientCount}`);
+  sioIdleListener = mpdIdler.addListener(onSubsystemChange);
   socket.on('disconnect', () => {
-    log.info('[socketio] client disconnected');
+    clientCount--;
+    if (typeof sioIdleListener === 'function') sioIdleListener();
+    log.info(`[socketio] client disconnected, client count is ${clientCount}`);
   });
 });

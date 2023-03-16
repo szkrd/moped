@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { uniq } from 'lodash';
 import { createConnection, Socket } from 'node:net';
 import { config } from './config';
 import { log } from './log';
@@ -47,7 +48,7 @@ function processQueue() {
     const key = keys[idx];
     if (queue[key] > 0) {
       log.info(`[mpd-idle] subsystem changed (${key})`);
-      listeners.forEach((cb) => cb(key as TSubsystemNames, queue[key]));
+      uniq(listeners).forEach((cb) => cb(key as TSubsystemNames, queue[key]));
       queue[key] = 0;
     }
   }
@@ -81,7 +82,13 @@ function disconnect() {
 }
 
 function addListener(cb: TListener) {
-  if (!listeners.includes(cb)) listeners.push(cb);
+  listeners.push(cb);
+  return () => {
+    const pos = listeners.indexOf(cb);
+    if (pos > -1) {
+      listeners.splice(pos, 1);
+    }
+  };
 }
 
 export const mpdIdler = {

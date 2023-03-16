@@ -7,6 +7,14 @@ export function decapitalize(string = '') {
   return string.charAt(0).toLocaleLowerCase() + string.slice(1);
 }
 
+export function ellipsisLine(text = '', len = 10) {
+  text = text.replace(/[\r\n]/g, ' ');
+  if (text.length >= len) {
+    text = text.substring(0, len) + '…';
+  }
+  return text;
+}
+
 export function camelCase(string = '') {
   return decapitalize(
     string

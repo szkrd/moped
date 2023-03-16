@@ -3,14 +3,19 @@ import { createConnection, Socket } from 'node:net';
 import { MpdCommand } from '../models/mpdCommand';
 import { IMpdError } from '../models/mpdResponse/error';
 import { normalizeVersion, parseMpdError } from '../utils/mpd';
+import { colorize } from '../utils/ansi';
+import { ellipsisLine } from '../utils/string';
 import { config } from './config';
 import { log } from './log';
 
 /** Message queue process interval */
 const QUEUE_TIMEOUT = 1000;
 
-/** Send "ping" to mpd to prevent socket close; tick increment happens on QUEUE_TIMEOUT */
-const KEEPALIVE_TICK = 10;
+/**
+ * Send "ping" to mpd to prevent socket close; tick increment happens on QUEUE_TIMEOUT;
+ * (mpd default is 60 secs, can be set with "connection_timeout").
+ */
+const KEEPALIVE_TICK = 30;
 
 // ---------------------------------------------------------
 
@@ -78,7 +83,7 @@ function addToMessageQueue(msg: IQueuedMessage) {
   }
 }
 
-function sendCommand(command: MpdCommand, args: string | undefined | string[] = []) {
+function sendCommand(command: MpdCommand, args: string | undefined | string[] = [], source = '') {
   if (!Array.isArray(args)) args = [args];
   // remove undefineds
   args = args.filter((val) => val !== undefined);
@@ -87,14 +92,16 @@ function sendCommand(command: MpdCommand, args: string | undefined | string[] = 
   const quotedArgs = args.map((arg) => (/\s/g.test(arg) ? `"${arg}"` : arg));
   // A command sequence is terminated by the newline character.
   const message = [command, ...quotedArgs].join(' ') + '\n';
-  log.info(`[mpd] sending command: ${message.trim()}`);
+  log.info(`[mpd] sending command: "${colorize.yellow(message.trim())}"` + (source ? ` (for ${source})` : ''));
   return new Promise<string>((resolve, reject) => {
     addToMessageQueue({
       command,
       message,
       onSuccess: [
         (resp: string) => {
-          log.info('[mpd] on success:', resp || 'no data.');
+          const shortResp = resp ? `»${ellipsisLine(resp)}«` : 'no data';
+          const msg = colorize.green(message.trim());
+          log.info(`[mpd] on success for "${msg}": ${shortResp}`);
           resolve(resp);
         },
       ],
