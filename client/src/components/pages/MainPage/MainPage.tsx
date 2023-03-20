@@ -4,7 +4,7 @@ import Button from '../../common/Button/Button';
 import TabSelector, { ITabSelectorTab } from '../../common/TabSelector/TabSelector';
 
 const TABS: ITabSelectorTab[] = [
-  { name: 'stats', url: 'stats' },
+  { name: 'all stats', url: 'stats' },
   { name: 'favorites', url: 'favorites' },
   { name: 'history', url: 'history' },
 ];

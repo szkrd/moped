@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import cors from 'cors';
 import express from 'express';
 import { debounce } from 'lodash';
 import fs from 'fs';
@@ -28,6 +29,7 @@ mpdIdler.addListener(
 
 // fire up express
 const app = express();
+app.use(cors());
 app.use(express.json());
 setupRoutes(app);
 
