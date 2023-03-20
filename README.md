@@ -11,6 +11,9 @@ with ncpmpcpp is the simplest and best way to access the server).
 
 ![screenshot](./docs/screenshot-02.png)
 
+- **v1**: vanilla js in /public
+- **v2**: react ts in /client, see [README](./client/README.md) (WIP)
+
 ## notes
 
 The MPD protocol is a "streamingish" protocol and translating it to REST

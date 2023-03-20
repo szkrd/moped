@@ -1,0 +1,21 @@
+.button {
+  padding: 10px;
+  display: block;
+  margin: 2px;
+  background-color: lightgray;
+  border-radius: 2px;
+  border: 2px outset silver;
+  text-decoration: none;
+  transition: all ease-out 0.2s;
+}
+
+.button.selected {
+  background-color: gray;
+  color: lightgray;
+  font-weight: bold;
+}
+
+.button:active {
+  background-color: white;
+  border: 2px inset silver;
+}

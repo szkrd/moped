@@ -1,0 +1,16 @@
+.tabButtons {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid lightgray;
+  padding: 0 6px;
+}
+
+.tabButton {
+  display: block;
+  border-bottom: 0;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  top: 2px;
+  margin-left: -2px;
+}
