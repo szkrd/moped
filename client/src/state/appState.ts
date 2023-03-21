@@ -3,13 +3,17 @@ import produce from 'immer';
 import { DeepPartial } from '../utils/typescript/deepPartial';
 import { getInitialApiState } from './apiState';
 import { getInitialCurrentSongState } from './currentSongState';
+import { getInitialFavoritesState } from './favoritesState';
 import { getInitialStatsState } from './statsState';
+import { getInitialStatusState } from './statusState';
 
 const appStateEvents = new EventEmitter();
 let _appState = {
   api: getInitialApiState(),
   stats: getInitialStatsState(),
+  status: getInitialStatusState(),
   currentSong: getInitialCurrentSongState(),
+  favorites: getInitialFavoritesState(),
 };
 
 export type IAppState = typeof _appState;

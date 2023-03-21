@@ -1,5 +1,5 @@
-// this is not really important, ts typeof would be enough
-// but with more complex states this will be clearer...
+// this is not really important (describing the interface as opposed
+// to using typeof) but with more complex states this will be clearer...
 export interface IStatsState {
   uptime: number;
   playtime: number;
