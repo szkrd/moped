@@ -1,4 +1,6 @@
-export interface IStatusState {
+import { IFromApi } from './apiState';
+
+export interface IStatusState extends IFromApi {
   volume: number;
   repeat: boolean;
   random: boolean;
@@ -25,6 +27,7 @@ export interface IStatusState {
 }
 
 export const getInitialStatusState = (): IStatusState => ({
+  uninitialized: true,
   volume: -1,
   repeat: false,
   random: false,

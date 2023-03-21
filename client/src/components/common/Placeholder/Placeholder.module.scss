@@ -1,0 +1,32 @@
+.placeholder {
+  position: relative;
+  background-color: #ddd;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 5px;
+  opacity: 0.5;
+}
+
+.content {
+  visibility: hidden;
+}
+
+.wave {
+  position: absolute;
+  left: -75%;
+  height: 100%;
+  width: 75%;
+  background-image: linear-gradient(90deg, #fff0, #eee, #fff0);
+  animation: loading 1s infinite;
+  z-index: 2;
+}
+
+@keyframes loading {
+  0% {
+    left: -75%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}

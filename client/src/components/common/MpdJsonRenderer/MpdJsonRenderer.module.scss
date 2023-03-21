@@ -1,0 +1,62 @@
+.jsonData {
+  list-style: none;
+  margin: 10px 5px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  width: calc(100% - 10px);
+  border-radius: 3px;
+  font-size: 16px;
+  line-height: 18px;
+  min-height: 18px;
+  // opacity: 0.2;
+  // filter: grayscale(1) sepia(1) brightness(0);
+}
+
+.jsonData:hover {
+  opacity: 1;
+  filter: none;
+}
+
+.jsonData li {
+  margin: 2px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.jsonData li.space-after {
+  margin-right: 6px;
+}
+
+.jsonData li.disabled,
+.jsonData li.disabled label {
+  color: darkgray;
+}
+
+.jsonData li label {
+  color: darkred;
+  padding: 0 5px 0 0;
+  display: block;
+  font-weight: bold;
+}
+
+.jsonData li label::after {
+  content: ':';
+}
+
+.jsonData li span {
+  word-break: break-all;
+}
+
+// types
+
+.jsonData li .type_number {
+  color: darkorange;
+}
+
+.jsonData li .type_string {
+  color: darkcyan;
+}

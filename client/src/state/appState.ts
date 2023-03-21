@@ -4,6 +4,7 @@ import { DeepPartial } from '../utils/typescript/deepPartial';
 import { getInitialApiState } from './apiState';
 import { getInitialCurrentSongState } from './currentSongState';
 import { getInitialFavoritesState } from './favoritesState';
+import { getInitialIdleSubsystemState } from './idleSubsystemState';
 import { getInitialStatsState } from './statsState';
 import { getInitialStatusState } from './statusState';
 
@@ -14,6 +15,7 @@ let _appState = {
   status: getInitialStatusState(),
   currentSong: getInitialCurrentSongState(),
   favorites: getInitialFavoritesState(),
+  idleSubsystem: getInitialIdleSubsystemState(),
 };
 
 export type IAppState = typeof _appState;

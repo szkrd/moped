@@ -13,4 +13,14 @@
   z-index: 1;
   top: 2px;
   margin-left: -2px;
+  color: black;
+  font-size: 18px;
+
+  &:first-of-type {
+    border-top-left-radius: 5px;
+  }
+
+  &:last-of-type {
+    border-top-right-radius: 5px;
+  }
 }

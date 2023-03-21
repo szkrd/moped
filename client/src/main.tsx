@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import 'modern-normalize';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -8,12 +9,18 @@ import { HistoryTab } from './components/pages/MainPage/tabs/HistoryTab/HistoryT
 import { StatsTab } from './components/pages/MainPage/tabs/StatsTab/StatsTab';
 import './index.scss';
 import { apiGetAllStats } from './modules/api';
+import dayjsRelativeTime from 'dayjs/plugin/relativeTime';
+import dayjsDuration from 'dayjs/plugin/duration';
+import { setupSocketIo } from './modules/socketIo';
+
+dayjs.extend(dayjsRelativeTime);
+dayjs.extend(dayjsDuration);
+setupSocketIo();
 
 const router = createHashRouter([
   {
     path: '/',
     element: <MainPage />,
-    // loader: rootLoader,
     children: [
       {
         path: 'stats',
