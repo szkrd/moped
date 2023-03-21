@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import Button from '../Button/Button';
+import { Button } from '../Button/Button';
 import styles from './TabSelector.module.scss';
 
 export interface ITabSelectorTab {
@@ -11,7 +11,7 @@ interface ITabSelector {
   tabs: ITabSelectorTab[];
 }
 
-const TabSelector: FC<ITabSelector> = ({ tabs }) => {
+export const TabSelector: FC<ITabSelector> = ({ tabs }) => {
   return (
     <div>
       <div className={styles.tabButtons}>
@@ -24,5 +24,3 @@ const TabSelector: FC<ITabSelector> = ({ tabs }) => {
     </div>
   );
 };
-
-export default TabSelector;

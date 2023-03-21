@@ -18,7 +18,7 @@ interface AbortablePromise<T> extends Promise<T> {
   abort?: () => void;
 }
 
-interface IRequestOptions extends RequestInit {
+export interface IRequestOptions extends RequestInit {
   /** Anything that should be JSON stringified; if set, overwrites the body payload. */
   data?: any | BodyInit;
   /** Url query part, with proper escape; array resolution is NOT supported. */

@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { useAppState } from '../../../../../hooks/useAppState';
-import { IStats } from '../../../../../state/statsState';
+import { IStatsState } from '../../../../../state/statsState';
 
-const StatsTab: FC = () => {
+export const StatsTab: FC = () => {
   // instead of react router's useLoaderData we connect directly to the store
-  const stats = useAppState<IStats>((state) => state.stats);
+  const stats = useAppState<IStatsState>((state) => state.stats);
   console.log('rerender statstab');
   return (
     <div>
@@ -15,5 +15,3 @@ const StatsTab: FC = () => {
     </div>
   );
 };
-
-export default StatsTab;

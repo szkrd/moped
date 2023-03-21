@@ -1,11 +1,13 @@
 import EventEmitter from 'events';
 import produce from 'immer';
 import { DeepPartial } from '../utils/typescript/deepPartial';
+import { getInitialApiState } from './apiState';
 import { getInitialCurrentSongState } from './currentSongState';
 import { getInitialStatsState } from './statsState';
 
 const appStateEvents = new EventEmitter();
 let _appState = {
+  api: getInitialApiState(),
   stats: getInitialStatsState(),
   currentSong: getInitialCurrentSongState(),
 };

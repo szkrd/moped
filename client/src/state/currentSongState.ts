@@ -1,5 +1,5 @@
 /** Current song data, which MAY be fuzzy (think of mp3v2 tags or arbitrary metadata fields). */
-export interface ICurrentSong {
+export interface ICurrentSongState {
   file: string;
   lastModified?: string;
   title?: string;
@@ -14,7 +14,7 @@ export interface ICurrentSong {
   liked: boolean;
 }
 
-export const getInitialCurrentSongState = (): ICurrentSong => ({
+export const getInitialCurrentSongState = (): ICurrentSongState => ({
   file: '',
   pos: -1,
   id: -1,

@@ -3,21 +3,24 @@ import { FC, PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Button.module.scss';
 
-interface IButton {
+export interface IButton {
   className?: string;
   url?: string;
+  onClick?: () => void;
 }
 
-const Button: FC<PropsWithChildren<IButton>> = (props) => {
-  const { children, url } = props;
+export const Button: FC<PropsWithChildren<IButton>> = (props) => {
+  const { children, url, onClick } = props;
   const className = classNames(styles.button, props.className);
   if (url)
     return (
-      <Link to={url} className={className}>
+      <Link to={url} className={className} onClick={onClick}>
         {children}
       </Link>
     );
-  return <button className={className}>{children}</button>;
+  return (
+    <button className={className} onClick={onClick}>
+      {children}
+    </button>
+  );
 };
-
-export default Button;

@@ -1,12 +1,10 @@
 import './App.module.scss';
-import MainPage from './components/pages/MainPage/MainPage';
+import { MainPage } from './components/pages/MainPage/MainPage';
 
-function App() {
+export function App() {
   return (
     <>
       <MainPage />
     </>
   );
 }
-
-export default App;

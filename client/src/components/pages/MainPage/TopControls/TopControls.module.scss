@@ -1,0 +1,16 @@
+.groupButtons {
+  display: flex;
+
+  .wide {
+    width: 56px;
+  }
+
+  & > button {
+    width: 46px;
+    margin-right: -5px;
+
+    &:last-of-type {
+      margin-right: 5px;
+    }
+  }
+}

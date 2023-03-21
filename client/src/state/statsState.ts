@@ -1,6 +1,6 @@
 // this is not really important, ts typeof would be enough
 // but with more complex states this will be clearer...
-export interface IStats {
+export interface IStatsState {
   uptime: number;
   playtime: number;
   artists: number;
@@ -10,7 +10,7 @@ export interface IStats {
   dbUpdate: number;
 }
 
-export const getInitialStatsState = (): IStats => ({
+export const getInitialStatsState = (): IStatsState => ({
   uptime: -1,
   playtime: -1,
   artists: -1,

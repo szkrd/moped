@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Outlet, Link } from 'react-router-dom';
-import Button from '../../common/Button/Button';
-import TabSelector, { ITabSelectorTab } from '../../common/TabSelector/TabSelector';
+import { Outlet } from 'react-router-dom';
+import { ITabSelectorTab, TabSelector } from '../../common/TabSelector/TabSelector';
+import { TopControls } from './TopControls/TopControls';
 
 const TABS: ITabSelectorTab[] = [
   { name: 'all stats', url: 'stats' },
@@ -9,17 +9,12 @@ const TABS: ITabSelectorTab[] = [
   { name: 'history', url: 'history' },
 ];
 
-const MainPage: FC = () => {
+export const MainPage: FC = () => {
   return (
     <div>
-      <h1>wip</h1>
-      <Button>Volume:</Button>
-      <Button>3</Button>
-      <Button>4</Button>
+      <TopControls />
       <TabSelector tabs={TABS} />
       <Outlet />
     </div>
   );
 };
-
-export default MainPage;

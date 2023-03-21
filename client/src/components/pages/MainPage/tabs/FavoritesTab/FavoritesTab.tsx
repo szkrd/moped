@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-const FavoritesTab: FC = () => {
+export const FavoritesTab: FC = () => {
   return <div>FavoritesTab</div>;
 };
-
-export default FavoritesTab;
