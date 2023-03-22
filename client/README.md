@@ -8,6 +8,6 @@ Use `npm run dev` or `npm run build`, by default it connects to a local server, 
 
 - [ ] implement all the functionality of the prototype vanilla js client
 - [ ] lock UI controls
-- [ ] Button (and ApiButton?) control disabled state
+- [x] Button (and ApiButton?) control disabled state
 - [ ] optimistic UI updates
 - [ ] error handling

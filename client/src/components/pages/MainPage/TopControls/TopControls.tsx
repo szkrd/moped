@@ -9,6 +9,7 @@ import { ApiButton } from '../../../common/ApiButton/ApiButton';
 import { Button } from '../../../common/Button/Button';
 import { ButtonBar } from '../../../common/ButtonBar/ButtonBar';
 import LoadIndicator from '../../../common/LoadIndicator/LoadIndicator';
+import { SearchButton } from '../../../common/SearchButton/SearchButton';
 import styles from './TopControls.module.scss';
 import { VolumeButton } from './VolumeButton/VolumeButton';
 
@@ -16,6 +17,7 @@ export const TopControls: FC = () => {
   const callCount = useAppState<number>((state) => state.api.callCount);
   const status = useAppState<IStatusState>((state) => state.status);
   const currentSong = useAppState<ICurrentSongState>((state) => state.currentSong);
+  const { formattedName } = currentSong;
   const onLikeClick = useCallback(() => apiPostLikeCurrentSong(currentSong), [currentSong]);
   const onVolumeClick = useCallback(() => apiGetStatus(), []);
   return (
@@ -47,6 +49,9 @@ export const TopControls: FC = () => {
         <Button selected={currentSong.liked} onClick={onLikeClick}>
           <Heart />
         </Button>
+        <SearchButton provider="google" searchText={formattedName} />
+        <SearchButton provider="youtube" searchText={formattedName} />
+        <SearchButton provider="spotify" searchText={formattedName} />
         <div className={styles.spacer}></div>
         <LoadIndicator active={callCount > 0} />
       </ButtonBar>
