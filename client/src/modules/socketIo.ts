@@ -5,8 +5,6 @@ import { config } from './config';
 const SIO_DEBOUNCE = 1000;
 
 export function setupSocketIo() {
-  // TODO https://socket.io/docs/v3/handling-cors/
-  return false;
   const socket = io(config.socketIoUrl);
   console.log('1>>>', socket);
   socket.on(

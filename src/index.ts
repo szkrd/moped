@@ -29,7 +29,7 @@ mpdIdler.addListener(
 
 // fire up express
 const app = express();
-app.use(cors());
+app.use(cors(config.cors));
 app.use(express.json());
 setupRoutes(app);
 
@@ -61,7 +61,7 @@ const server = app.listen(config.port, config.host, () => {
 });
 
 // add socketio, broadcast subsystem changes to everyone
-const io = new SocketIO(server);
+const io = new SocketIO(server, { cors: config.cors });
 let clientCount = 0;
 let sioIdleListener: undefined | (() => void);
 const onSubsystemChange = debounce((subsystem, at) => {
