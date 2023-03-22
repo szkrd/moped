@@ -1,20 +1,21 @@
 import { FC } from 'react';
 import { useAppState } from '../../../../../hooks/useAppState';
-import { ICurrentSongState } from '../../../../../state/currentSongState';
-import { IStatsState } from '../../../../../state/statsState';
-import { IStatusState } from '../../../../../state/statusState';
+import { IAppState } from '../../../../../state/appState';
 import { MpdJsonRenderer } from '../../../../common/MpdJsonRenderer/MpdJsonRenderer';
 
+const JsonStore: FC<{ section: keyof IAppState }> = ({ section }) => {
+  const data = useAppState<any>((state) => state[section]);
+  if (section === 'idleSubsystem' && data.uninitialized) return null;
+  return <MpdJsonRenderer data={data} />;
+};
+
 export const StatsTab: FC = () => {
-  // instead of react router's useLoaderData we connect directly to the store
-  const stats = useAppState<IStatsState>((state) => state.stats);
-  const currentSong = useAppState<ICurrentSongState>((state) => state.currentSong);
-  const status = useAppState<IStatusState>((state) => state.status);
   return (
     <div>
-      <MpdJsonRenderer data={currentSong as any} />
-      <MpdJsonRenderer data={stats as any} />
-      <MpdJsonRenderer data={status as any} />
+      <JsonStore section="currentSong" />
+      <JsonStore section="stats" />
+      <JsonStore section="status" />
+      <JsonStore section="idleSubsystem" />
     </div>
   );
 };

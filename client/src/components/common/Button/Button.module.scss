@@ -15,6 +15,15 @@
   background-color: gray;
   color: lightgray;
   font-weight: bold;
+  box-shadow: 5px 5px 5px inset #777;
+  border-top-color: #555;
+  border-left-color: #555;
+  border-bottom-color: #eee;
+  border-right-color: #eee;
+
+  & > svg {
+    fill: currentColor;
+  }
 }
 
 .button:active {

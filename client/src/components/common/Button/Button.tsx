@@ -7,11 +7,12 @@ export interface IButton {
   className?: string;
   url?: string;
   onClick?: () => void;
+  selected?: boolean;
 }
 
 export const Button: FC<PropsWithChildren<IButton>> = (props) => {
-  const { children, url, onClick } = props;
-  const className = classNames(styles.button, props.className);
+  const { children, url, onClick, selected } = props;
+  const className = classNames(styles.button, props.className, selected ? styles.selected : '');
   if (url)
     return (
       <Link to={url} className={className} onClick={onClick}>

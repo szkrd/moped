@@ -37,5 +37,15 @@ function onChange(cb: (state: IAppState) => void) {
 export const appState = {
   update,
   onChange,
-  _get: () => _appState,
+  /**
+   * Returns the current INTERNAL app state, which immer uses,
+   * so freezing or deep cloning is not an option (that would break
+   * the change detection, the very reason we're using immer).
+   *
+   * Getting a snapshot would be possible (freezing and deep cloning
+   * in development only), but one must always keep in mind that
+   * such snapshot would be a huge footgun if used inside a component
+   * (possibly triggering a rerender).
+   */
+  _get: () => _appState, // TODO: use deep freeze in development?
 };
