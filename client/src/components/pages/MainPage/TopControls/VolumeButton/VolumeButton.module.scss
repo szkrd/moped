@@ -1,0 +1,9 @@
+.volumeButton {
+  padding: 0;
+
+  & svg {
+    pointer-events: none;
+    position: absolute;
+    fill: currentColor;
+  }
+}

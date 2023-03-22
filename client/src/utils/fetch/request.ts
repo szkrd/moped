@@ -18,11 +18,13 @@ interface AbortablePromise<T> extends Promise<T> {
   abort?: () => void;
 }
 
+export type TQueryObject = Record<string, string | number | boolean>;
+
 export interface IRequestOptions extends RequestInit {
   /** Anything that should be JSON stringified; if set, overwrites the body payload. */
   data?: any | BodyInit;
   /** Url query part, with proper escape; array resolution is NOT supported. */
-  query?: Record<string, string | number | boolean>;
+  query?: TQueryObject;
   /** An object literal with string values (but NOT a string tuple or a Headers instance). */
   headers?: Record<string, string>;
   /** Auth bearer token */
