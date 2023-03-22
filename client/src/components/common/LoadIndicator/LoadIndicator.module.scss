@@ -23,6 +23,7 @@
   height: 16px;
   border-radius: 2px;
   background-color: gray;
+  box-shadow: 2px 2px 3px inset #555;
 }
 
 .wrapper .loadIndicator div {
@@ -66,7 +67,8 @@
 
 .wrapper.active .loadIndicator div {
   animation: loadIndicator 1.2s linear infinite;
-  background-color: #0ff;
+  background-color: #ff0;
+  box-shadow: 0 0 4px inset #ffa;
 
   &:nth-child(1) {
     animation-delay: 0s;
