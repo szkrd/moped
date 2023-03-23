@@ -4,6 +4,7 @@ import { DeepPartial } from '../utils/typescript/deepPartial';
 import { getInitialApiState } from './apiState';
 import { getInitialCurrentSongState } from './currentSongState';
 import { getInitialFavoritesState } from './favoritesState';
+import { getInitialHistoryState } from './historyState';
 import { getInitialIdleSubsystemState } from './idleSubsystemState';
 import { getInitialStatsState } from './statsState';
 import { getInitialStatusState } from './statusState';
@@ -15,6 +16,7 @@ let _appState = {
   status: getInitialStatusState(),
   currentSong: getInitialCurrentSongState(),
   favorites: getInitialFavoritesState(),
+  history: getInitialHistoryState(),
   idleSubsystem: getInitialIdleSubsystemState(),
 };
 
@@ -36,6 +38,10 @@ function onChange(cb: (state: IAppState) => void) {
 
 export const appState = {
   update,
+  /**
+   * Subscribe to store changes, returns an unsubscribe function.
+   * Mainly meant to be used in the useAppState hook (internally).
+   */
   onChange,
   /**
    * Returns the current INTERNAL app state, which immer uses,
@@ -47,5 +53,5 @@ export const appState = {
    * such snapshot would be a huge footgun if used inside a component
    * (possibly triggering a rerender).
    */
-  _get: () => _appState, // TODO: use deep freeze in development?
+  _get: () => _appState,
 };

@@ -8,7 +8,11 @@ interface IRelativeTime {
 }
 
 function getFormattedTime(at: number | string) {
-  return dayjs(parseInt(String(at), 10)).fromNow();
+  if (typeof at === 'number' || /^[0-9]*$/.test(String(at))) {
+    return dayjs(parseInt(String(at), 10)).fromNow();
+  } else {
+    return dayjs(at).fromNow();
+  }
 }
 
 export const RelativeTime: FC<IRelativeTime> = ({ at }) => {

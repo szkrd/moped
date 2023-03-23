@@ -9,16 +9,24 @@ export interface ITabSelectorTab {
 }
 
 interface ITabSelector {
+  led?: boolean;
   tabs: ITabSelectorTab[];
 }
 
-export const TabSelector: FC<ITabSelector> = ({ tabs }) => {
+export const TabSelector: FC<ITabSelector> = ({ tabs, led }) => {
   return (
     <div>
       <div className={styles.tabButtons}>
         {tabs.map((tab) => (
-          <Button url={tab.url} key={tab.url} className={styles.tabButton} selected={tab.selected}>
-            {tab.name}
+          <Button
+            url={tab.url}
+            key={tab.url}
+            className={styles.tabButton}
+            selected={tab.selected}
+            selectedClassName={styles.tabButtonSelected}
+          >
+            {led && <b className={styles.led}></b>}
+            <span>{tab.name}</span>
           </Button>
         ))}
       </div>

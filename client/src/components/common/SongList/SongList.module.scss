@@ -1,0 +1,58 @@
+.songList {
+  list-style: none;
+  padding: 0;
+  margin: 3px;
+}
+
+.songList li {
+  padding: 5px;
+  border: 2px outset silver;
+  box-shadow: -2px -2px 2px inset #ccc, 2px 2px 2px inset #fff;
+  margin-top: -1px;
+}
+
+.songList li.even {
+  background-color: #e5e5e5;
+}
+
+.songList li.odd {
+  background-color: #f5f5f5;
+}
+
+.songList h3 {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: normal;
+}
+
+.songList h3 .name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-grow: 1;
+  cursor: default;
+}
+
+.songList h3 .name:hover {
+  text-decoration: underline;
+}
+
+.songList .actions {
+  display: flex;
+  font-size: 16px;
+}
+
+.songList .details {
+  margin-bottom: 10px;
+}
+
+.songList .details label {
+  font-weight: bold;
+}
+
+.detailsIconFlipped {
+  transform: scaleY(-1);
+}

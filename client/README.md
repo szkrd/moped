@@ -11,3 +11,5 @@ Use `npm run dev` or `npm run build`, by default it connects to a local server, 
 - [x] Button (and ApiButton?) control disabled state
 - [ ] optimistic UI updates
 - [ ] error handling
+- [ ] ytdlp
+- [ ] lyrics

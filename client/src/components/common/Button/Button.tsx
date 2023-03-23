@@ -1,34 +1,42 @@
 import classNames from 'classnames';
 import { noop } from 'lodash';
-import { FC, PropsWithChildren } from 'react';
+import { FC, MouseEvent, PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Button.module.scss';
 
 export interface IButton {
   className?: string;
+  selectedClassName?: string;
   url?: string;
   newTab?: boolean;
-  onClick?: () => void;
+  onClick?: (event: MouseEvent<HTMLElement>) => void;
   selected?: boolean;
   disabled?: boolean;
+  dataId?: string | number;
 }
 
 export const Button: FC<PropsWithChildren<IButton>> = (props) => {
-  const { children, url, onClick, selected, disabled, newTab } = props;
+  const { children, url, onClick, selected, disabled, newTab, selectedClassName, dataId } = props;
   const className = classNames(
     styles.button,
     props.className,
-    selected ? styles.selected : '',
+    selected ? classNames(styles.selected, selectedClassName) : '',
     disabled ? styles.disabled : ''
   );
   if (url)
     return (
-      <Link to={url} className={className} onClick={disabled ? noop : onClick} target={newTab ? '_blank' : undefined}>
+      <Link
+        to={url}
+        className={className}
+        data-id={dataId}
+        onClick={disabled ? noop : onClick}
+        target={newTab ? '_blank' : undefined}
+      >
         {children}
       </Link>
     );
   return (
-    <button className={className} onClick={onClick} disabled={disabled}>
+    <button className={className} onClick={onClick} disabled={disabled} data-id={dataId}>
       {children}
     </button>
   );

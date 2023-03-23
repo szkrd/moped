@@ -1,26 +1,55 @@
 .tabButtons {
   display: flex;
   gap: 0;
-  border-bottom: 2px solid lightgray;
-  padding: 0 6px;
+  background-color: #ccc;
+  box-shadow: 0 10px 20px inset #aaa, 0 -5px 10px inset #bbb;
+  border-top: 1px solid #ccc;
+  padding: 4px 6px;
 }
 
-.tabButton {
-  display: block;
-  border-bottom: 0;
+a.tabButton {
+  display: flex;
+  gap: 5px;
+  align-items: center;
   margin: 0;
-  position: relative;
   z-index: 1;
-  top: 2px;
   margin-left: -2px;
-  color: black;
+  color: #000;
   font-size: 18px;
+  height: 30px;
 
   &:first-of-type {
     border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
   }
 
   &:last-of-type {
     border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  & > b,
+  & > span {
+    display: block;
+  }
+
+  .led {
+    border: 1px solid #9e9e9e;
+    display: block;
+    width: 12px;
+    height: 12px;
+    background-color: #995;
+    box-shadow: 2px 2px 3px inset #555;
+    opacity: 0.85;
+    position: relative;
+    top: 1px;
+  }
+}
+
+a.tabButtonSelected {
+  .led {
+    background-color: #ff5;
+    box-shadow: 0 0 3px #ff05, 2px 2px 3px inset #aa2;
+    border-color: #880;
   }
 }

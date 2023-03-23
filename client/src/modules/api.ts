@@ -14,6 +14,7 @@ export enum ApiUrl {
   Play = '/controlling-playback/play',
   Likes = '/extra/likes',
   Like = '/extra/like',
+  History = '/extra/history',
 }
 
 export const apiCall = (url: ApiUrl, options: IRequestOptions = {}) => {
@@ -45,6 +46,12 @@ export const apiGetAllStats = () => {
 export const apiGetFavorites = () => {
   return apiCall(ApiUrl.Likes).then((response) => {
     appState.update((state) => (state.favorites = response));
+  });
+};
+
+export const apiGetHistory = () => {
+  return apiCall(ApiUrl.History).then((response) => {
+    appState.update((state) => (state.history = response));
   });
 };
 
