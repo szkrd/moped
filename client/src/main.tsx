@@ -8,7 +8,7 @@ import { FavoritesTab } from './components/pages/MainPage/tabs/FavoritesTab/Favo
 import { HistoryTab } from './components/pages/MainPage/tabs/HistoryTab/HistoryTab';
 import { StatsTab } from './components/pages/MainPage/tabs/StatsTab/StatsTab';
 import './index.scss';
-import { apiGetAllStats } from './modules/api';
+import { apiGetAllStats, apiGetFavorites } from './modules/api';
 import dayjsRelativeTime from 'dayjs/plugin/relativeTime';
 import dayjsDuration from 'dayjs/plugin/duration';
 import { setupSocketIo } from './modules/socketIo';
@@ -32,6 +32,10 @@ const router = createHashRouter([
       },
       {
         path: 'favorites',
+        loader: () => {
+          apiGetFavorites();
+          return null;
+        },
         element: <FavoritesTab />,
       },
       {

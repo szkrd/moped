@@ -12,8 +12,8 @@ export enum ApiUrl {
   Next = '/controlling-playback/next',
   Pause = '/controlling-playback/pause',
   Play = '/controlling-playback/play',
-  Likes = '/extra/like',
-  Like = '/extra/likes',
+  Likes = '/extra/likes',
+  Like = '/extra/like',
 }
 
 export const apiCall = (url: ApiUrl, options: IRequestOptions = {}) => {
