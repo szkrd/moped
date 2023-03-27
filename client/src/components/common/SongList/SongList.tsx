@@ -6,6 +6,7 @@ import { IPartialStoredSong } from '../../../state/favoritesState';
 import { Button } from '../Button/Button';
 import { RadioIcon } from '../RadioIcon/RadioIcon';
 import { RelativeTime } from '../RelativeTime/RelativeTime';
+import { SearchButton } from '../SearchButton/SearchButton';
 import styles from './SongList.module.scss';
 
 interface ISongList {
@@ -79,7 +80,21 @@ export const SongList: FC<ISongList> = (props) => {
                   <td>
                     <label>search:</label>
                   </td>
-                  <td>todo</td>
+                  <td>
+                    <div className={styles.actionButtons}>
+                      <SearchButton provider="google" searchText={song.formattedName} className={styles.searchButton} />
+                      <SearchButton
+                        provider="youtube"
+                        searchText={song.formattedName}
+                        className={styles.searchButton}
+                      />
+                      <SearchButton
+                        provider="spotify"
+                        searchText={song.formattedName}
+                        className={styles.searchButton}
+                      />
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>

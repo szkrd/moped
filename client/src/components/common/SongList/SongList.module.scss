@@ -56,3 +56,13 @@
 .detailsIconFlipped {
   transform: scaleY(-1);
 }
+
+.actionButtons {
+  display: flex;
+}
+
+.searchButton {
+  width: 32px;
+  height: 32px;
+  padding: 3px;
+}

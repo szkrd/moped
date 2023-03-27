@@ -1,10 +1,9 @@
-import React, { FC } from 'react';
-import dayjs from 'dayjs';
-import { escape } from 'lodash';
-import styles from './MpdJsonRenderer.module.scss';
 import classNames from 'classnames';
-import { RelativeTime } from '../RelativeTime/RelativeTime';
+import dayjs from 'dayjs';
+import { FC } from 'react';
 import { Placeholder } from '../Placeholder/Placeholder';
+import { RelativeTime } from '../RelativeTime/RelativeTime';
+import styles from './MpdJsonRenderer.module.scss';
 
 interface IMpdJsonRenderer {
   data: Record<string, string | number | boolean>;
@@ -47,11 +46,11 @@ export const MpdJsonRenderer: FC<IMpdJsonRenderer> = ({ data }) => {
     if (subType) className.push(subType);
     if (val !== false) {
       html.push({
-        label: escape(key),
+        label: key,
         className: classNames(className.map((cn) => styles[`type_${cn}`])),
         key,
-        dataValue: escape(text),
-        text: escape(formattedText || text),
+        dataValue: text,
+        text: formattedText || text,
       });
     }
   });

@@ -33,15 +33,25 @@ export const apiGetStatus = () => {
   });
 };
 
-export const apiGetAllStats = () => {
-  return Promise.all([apiCall(ApiUrl.Stats), apiCall(ApiUrl.Status), apiCall(ApiUrl.CurrentSong)]).then((responses) => {
-    const [stats, status, currentSong] = responses;
+export const apiGetStats = () => {
+  return apiCall(ApiUrl.Stats).then((stats) => {
     appState.update((state) => {
       state.stats = stats;
-      state.status = status;
-      state.currentSong = currentSong;
     });
   });
+};
+
+export const apiGetCurrentSong = () => {
+  return apiCall(ApiUrl.CurrentSong).then((currentSong) => {
+    appState.update((state) => {
+      state.currentSong = currentSong;
+      document.title = currentSong.formattedName ?? 'moped';
+    });
+  });
+};
+
+export const apiGetAllStats = () => {
+  return Promise.all([apiGetCurrentSong(), apiGetStatus(), apiGetStats()]);
 };
 
 export const apiGetFavorites = () => {
