@@ -7,6 +7,8 @@ export interface IStoredSong extends Omit<ICurrentSongState, 'pos' | 'duration' 
   at: string;
 }
 
+export type IPartialStoredSong = Partial<IStoredSong>;
+
 export interface IFavoritesState extends IFromApi {
   songs: IStoredSong[];
 }

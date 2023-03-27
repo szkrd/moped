@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Outlet, useHref, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { ITabSelectorTab, TabSelector } from '../../common/TabSelector/TabSelector';
 import { CurrentSongTitle } from './CurrentSongTitle/CurrentSongTitle';
 import { TopControls } from './TopControls/TopControls';

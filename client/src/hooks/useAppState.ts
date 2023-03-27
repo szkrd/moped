@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { appState, IAppState } from '../state/appState';
 
@@ -18,6 +19,7 @@ export function useAppState<T>(scope: (state: IAppState) => T) {
     return () => {
       unsubscribe();
     };
+    // scope will always be an ad hoc dynamic function, but it _really_ should always be the same
   }, [setLocalState]);
   // ^ using localState would trigger an extra rerender, but since
   // we're using immer, we won't need primitive change detection anyway

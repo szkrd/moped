@@ -1,5 +1,6 @@
 import { appState } from '../state/appState';
 import { ICurrentSongState } from '../state/currentSongState';
+import { IPartialStoredSong } from '../state/favoritesState';
 import { IRequestOptions, request } from '../utils/fetch/request';
 
 export enum ApiUrl {
@@ -55,9 +56,15 @@ export const apiGetHistory = () => {
   });
 };
 
-export const apiPostLikeCurrentSong = (currentSong: ICurrentSongState) => {
+export const apiPostLikeSong = (currentSong: ICurrentSongState | IPartialStoredSong) => {
   // it's better to get the current song as param, since that's what we see on the UI realtime
   return apiCall(ApiUrl.Like, { method: 'POST', data: currentSong }).then(() => {
+    return apiGetFavorites();
+  });
+};
+
+export const apiDeleteLikedSong = (id: number) => {
+  return apiCall(ApiUrl.Like, { method: 'DELETE', data: { id } }).then(() => {
     return apiGetFavorites();
   });
 };

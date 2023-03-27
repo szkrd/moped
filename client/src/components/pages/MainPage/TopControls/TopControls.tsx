@@ -2,7 +2,7 @@ import { range } from 'lodash';
 import { FC, useCallback } from 'react';
 import { Heart, Pause, Play, SkipBack, SkipForward, Square, Volume2 } from 'react-feather';
 import { useAppState } from '../../../../hooks/useAppState';
-import { apiGetStatus, apiPostLikeCurrentSong, ApiUrl } from '../../../../modules/api';
+import { apiGetStatus, apiPostLikeSong, ApiUrl } from '../../../../modules/api';
 import { ICurrentSongState } from '../../../../state/currentSongState';
 import { IStatusState } from '../../../../state/statusState';
 import { ApiButton } from '../../../common/ApiButton/ApiButton';
@@ -18,7 +18,7 @@ export const TopControls: FC = () => {
   const status = useAppState<IStatusState>((state) => state.status);
   const currentSong = useAppState<ICurrentSongState>((state) => state.currentSong);
   const { formattedName } = currentSong;
-  const onLikeClick = useCallback(() => apiPostLikeCurrentSong(currentSong), [currentSong]);
+  const onLikeClick = useCallback(() => apiPostLikeSong(currentSong), [currentSong]);
   const onVolumeClick = useCallback(() => apiGetStatus(), []);
   return (
     <div className={styles.topControls}>

@@ -1,26 +1,28 @@
-import { map, omit } from 'lodash';
-import React, { FC, useCallback, useState } from 'react';
-import { IStoredSong } from '../../../state/favoritesState';
-import { RadioIcon } from '../RadioIcon/RadioIcon';
-import styles from './SongList.module.scss';
 import classNames from 'classnames';
-import { ChevronDown, ChevronUp, Heart, Triangle, X } from 'react-feather';
+import { map, omit } from 'lodash';
+import { FC, useCallback, useState } from 'react';
+import { Heart, Triangle, X } from 'react-feather';
+import { IPartialStoredSong } from '../../../state/favoritesState';
 import { Button } from '../Button/Button';
+import { RadioIcon } from '../RadioIcon/RadioIcon';
 import { RelativeTime } from '../RelativeTime/RelativeTime';
+import styles from './SongList.module.scss';
 
 interface ISongList {
-  songs: Partial<IStoredSong>[];
+  songs: IPartialStoredSong[];
   className?: string;
-  onLikeClick?: (id: number) => void;
-  onRemoveClick?: (id: number) => void;
+  onLikeClick?: (song: IPartialStoredSong) => void;
+  onRemoveClick?: (song: IPartialStoredSong) => void;
 }
 
 export const SongList: FC<ISongList> = (props) => {
-  const { songs } = props;
+  const { songs, onLikeClick, onRemoveClick } = props;
   const [opened, setOpened] = useState<number[]>([]);
+  // okay, capturing the id this (old) way is fine and performant/dry
+  // we just can't reuse it in a sane way (see `useDatasetCallback` for the problem)
   const onDetailsClick = useCallback(
     (event: any) => {
-      const id = parseInt(event.currentTarget.dataset.id);
+      const id = parseInt(event.currentTarget.dataset.id, 10);
       if (opened.includes(id)) setOpened(opened.filter((cid) => cid !== id));
       else setOpened([...opened, id]);
     },
@@ -44,12 +46,12 @@ export const SongList: FC<ISongList> = (props) => {
                 {opened.includes(song.id ?? -1) ? <Triangle /> : <Triangle className={styles.detailsIconFlipped} />}
               </Button>
               {props.onLikeClick !== undefined && (
-                <Button data-id={song.id}>
+                <Button dataId={song.id} onClick={onLikeClick ? () => onLikeClick(song) : undefined}>
                   <Heart />
                 </Button>
               )}
               {props.onRemoveClick !== undefined && (
-                <Button data-id={song.id}>
+                <Button dataId={song.id} onClick={onRemoveClick ? () => onRemoveClick(song) : undefined}>
                   <X />
                 </Button>
               )}

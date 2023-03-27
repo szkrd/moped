@@ -12,7 +12,12 @@ interface IRadioIcon {
   song: Partial<IStoredSong>;
 }
 
-const getRadioIcon = (song: Partial<IStoredSong>) => {
+interface IImage {
+  src: string;
+  alt: string;
+}
+
+const getRadioIcon = (song: Partial<IStoredSong>): IImage => {
   const name = song.name ?? '';
   if (name.includes('J-Pop Sakura') || name.includes('Asia DREAM')) {
     return { src: asiadreamUrl, alt: 'Asia Dream Radio' };
@@ -32,6 +37,6 @@ const getRadioIcon = (song: Partial<IStoredSong>) => {
 };
 
 export const RadioIcon: FC<IRadioIcon> = ({ song }) => {
-  const props = getRadioIcon(song);
-  return <img src={props.src} width="32" height="32" alt={props.alt} />;
+  const imgProps = getRadioIcon(song); // we can't call this props, because... because eslint plugin is buggy
+  return <img src={imgProps.src} width="32" height="32" alt={imgProps.alt} />;
 };
