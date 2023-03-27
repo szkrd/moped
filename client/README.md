@@ -7,12 +7,14 @@ Use `npm run dev` or `npm run build`, by default it connects to a local server, 
 ## TODO
 
 - [ ] implement all the functionality of the prototype vanilla js client
-- [ ] lock UI controls
+- [x] lock UI controls (partially)
 - [x] Button (and ApiButton?) control disabled state
-- [ ] optimistic UI updates
+- [x] optimistic UI updates (partially, but it still is painfully slow)
+- [ ] responsive layout
+- [ ] add description to favorite
 - [ ] error handling
 - [ ] ytdlp
-- [ ] lyrics
+- [ ] lyrics (?)
 
 ## WARNING
 

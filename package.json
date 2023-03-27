@@ -4,9 +4,10 @@
   "description": "Rest API for MPD.",
   "main": "index.js",
   "scripts": {
-    "dev": "npx nodemon",
+    "start:backend": "npm run build && node dist/index.js",
     "build": "rimraf ./dist && tsc",
-    "start": "npm run build && node dist/index.js",
+    "dev": "npx nodemon",
+    "start": "cd client && npm i && npm run build && cd .. && npm i && rimraf ./dist && tsc && node dist/index.js",
     "lint": "eslint src"
   },
   "keywords": [],

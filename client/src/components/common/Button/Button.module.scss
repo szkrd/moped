@@ -30,7 +30,7 @@ a.button {
   }
 }
 
-.button:active {
+.button:active:not([disabled]) {
   background-color: white;
   border: 2px inset silver;
 }

@@ -5,9 +5,9 @@ import { Heart, Triangle, X } from 'react-feather';
 import { IPartialStoredSong } from '../../../state/favoritesState';
 import { Button } from '../Button/Button';
 import { RadioIcon } from '../RadioIcon/RadioIcon';
-import { RelativeTime } from '../RelativeTime/RelativeTime';
 import { SearchButton } from '../SearchButton/SearchButton';
 import styles from './SongList.module.scss';
+import SongObjectValueRenderer from './SongObjectValueRenderer';
 
 interface ISongList {
   songs: IPartialStoredSong[];
@@ -47,7 +47,12 @@ export const SongList: FC<ISongList> = (props) => {
                 {opened.includes(song.id ?? -1) ? <Triangle /> : <Triangle className={styles.detailsIconFlipped} />}
               </Button>
               {props.onLikeClick !== undefined && (
-                <Button dataId={song.id} onClick={onLikeClick ? () => onLikeClick(song) : undefined}>
+                <Button
+                  dataId={song.id}
+                  onClick={onLikeClick ? () => onLikeClick(song) : undefined}
+                  selected={song.liked}
+                  disabled={song.liked === true}
+                >
                   <Heart />
                 </Button>
               )}
@@ -68,11 +73,7 @@ export const SongList: FC<ISongList> = (props) => {
                       <label className={styles.key}>{key}:</label>
                     </td>
                     <td>
-                      {key === 'at' && !!value && typeof value === 'string' ? (
-                        <RelativeTime at={value} />
-                      ) : (
-                        <span className={styles.value}>{value}</span>
-                      )}
+                      <SongObjectValueRenderer keyName={key} value={value} className={styles.value} />
                     </td>
                   </tr>
                 ))}
