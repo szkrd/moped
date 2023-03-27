@@ -18,6 +18,17 @@ interface AbortablePromise<T> extends Promise<T> {
   abort?: () => void;
 }
 
+/** HTTP methods for convenience, since RequestInit.method is not reusable */
+export enum HTTPMethod {
+  Delete = 'DELETE',
+  Get = 'GET',
+  Head = 'HEAD',
+  Options = 'OPTIONS',
+  Patch = 'PATCH',
+  Post = 'POST',
+  Put = 'PUT',
+}
+
 export type TQueryObject = Record<string, string | number | boolean>;
 
 export interface IRequestOptions extends RequestInit {

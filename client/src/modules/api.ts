@@ -1,7 +1,8 @@
+import { pull } from 'lodash';
 import { appState } from '../state/appState';
 import { ICurrentSongState } from '../state/currentSongState';
 import { IPartialStoredSong } from '../state/favoritesState';
-import { IRequestOptions, request } from '../utils/fetch/request';
+import { HTTPMethod, IRequestOptions, request } from '../utils/fetch/request';
 
 export enum ApiUrl {
   Status = '/status/status',
@@ -19,9 +20,18 @@ export enum ApiUrl {
 }
 
 export const apiCall = (url: ApiUrl, options: IRequestOptions = {}) => {
-  appState.update((state) => state.api.callCount++);
+  const method = (options.method as HTTPMethod) ?? HTTPMethod.Get;
+  appState.update((state) =>
+    state.api.calls.push({
+      method,
+      url,
+    })
+  );
   return request(url, options).finally(() => {
-    appState.update((state) => state.api.callCount--);
+    appState.update((state) => {
+      const matchingCall = state.api.calls.find((call) => call.method === method && call.url === url);
+      if (matchingCall) pull(state.api.calls, matchingCall);
+    });
   });
 };
 

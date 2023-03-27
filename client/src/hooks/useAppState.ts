@@ -6,7 +6,7 @@ import { appState, IAppState } from '../state/appState';
  * Detect state changes and use a scope function to return
  * a section of the store relevant for your component.
  *
- * Either return a section OR a primitive value, do NOT
+ * Either return a section **OR** a primitive value, do **NOT**
  * return a new, custom object, because that will defeat
  * the purpose of immer and change detection!
  */

@@ -14,7 +14,7 @@ import styles from './TopControls.module.scss';
 import { VolumeButton } from './VolumeButton/VolumeButton';
 
 export const TopControls: FC = () => {
-  const callCount = useAppState<number>((state) => state.api.callCount);
+  const callCount = useAppState<number>((state) => state.api.calls.length);
   const status = useAppState<IStatusState>((state) => state.status);
   const currentSong = useAppState<ICurrentSongState>((state) => state.currentSong);
   const { formattedName } = currentSong;

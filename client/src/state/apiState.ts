@@ -1,12 +1,21 @@
+import { ApiUrl } from '../modules/api';
+import { HTTPMethod } from '../utils/fetch/request';
+
 export interface IFromApi {
   uninitialized?: boolean;
 }
 
-/** Current song data, which MAY be fuzzy (think of mp3v2 tags or arbitrary metadata fields). */
+export interface IOngoingCall {
+  method: HTTPMethod;
+  url: ApiUrl;
+}
+
 export interface IApiState {
   callCount: number;
+  calls: IOngoingCall[];
 }
 
 export const getInitialApiState = (): IApiState => ({
   callCount: 0,
+  calls: [],
 });
