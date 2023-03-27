@@ -26,8 +26,7 @@ export const router = createHashRouter([
     element: <MainPage />,
     loader: (args) => {
       const absUrl = args.request.url.replace(location.origin, '');
-      const isRoot = ['', AppPaths.Root].includes(absUrl);
-      return isRoot ? getLoader(apiGetAllStats)() : null;
+      return absUrl === AppPaths.StatsTab ? null : getLoader(apiGetAllStats)();
     },
     children: [
       {

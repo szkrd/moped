@@ -9,7 +9,7 @@ export interface IStatusState extends IFromApi {
   playlist: number;
   playlistLength: number;
   mixrampDb: number;
-  state: 'play' | 'stop' | 'pause';
+  state: 'play' | 'stop' | 'pause' | 'unknown';
   song: number;
   songId: number;
   duration?: number;

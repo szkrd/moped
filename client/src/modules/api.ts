@@ -1,4 +1,5 @@
 import { pull } from 'lodash';
+import { IOngoingCall } from '../state/apiState';
 import { appState } from '../state/appState';
 import { ICurrentSongState } from '../state/currentSongState';
 import { IPartialStoredSong } from '../state/favoritesState';
@@ -35,6 +36,10 @@ export const apiCall = (url: ApiUrl, options: IRequestOptions = {}) => {
   });
 };
 
+export const apiCallInProgress = (calls: IOngoingCall[], url: ApiUrl, method = HTTPMethod.Get) => {
+  return calls.findIndex((call) => call.method === method && call.url === url) > -1;
+};
+
 export const apiGetStatus = () => {
   return apiCall(ApiUrl.Status).then((response) => {
     appState.update((state) => {
@@ -66,13 +71,39 @@ export const apiGetAllStats = () => {
 
 export const apiGetFavorites = () => {
   return apiCall(ApiUrl.Likes).then((response) => {
-    appState.update((state) => (state.favorites = response));
+    appState.update((state) => {
+      state.favorites = response;
+      state.currentSong.liked =
+        response.songs.findIndex(
+          (song: IPartialStoredSong) => song.formattedName && song.formattedName === state.currentSong.formattedName
+        ) > -1;
+    });
   });
 };
 
 export const apiGetHistory = () => {
   return apiCall(ApiUrl.History).then((response) => {
     appState.update((state) => (state.history = response));
+  });
+};
+
+// All actions are optimistic, if there was something wrong then the call
+// triggered by the idle channel will revert/fix the state.
+export const apiGetActionPlay = () => {
+  return apiCall(ApiUrl.Play).then(() => {
+    appState.update((state) => (state.status.state = 'play'));
+  });
+};
+
+export const apiGetActionStop = () => {
+  return apiCall(ApiUrl.Stop).then(() => {
+    appState.update((state) => (state.status.state = 'stop'));
+  });
+};
+
+export const apiGetActionPause = () => {
+  return apiCall(ApiUrl.Pause).then(() => {
+    appState.update((state) => (state.status.state = 'pause'));
   });
 };
 
