@@ -12,7 +12,14 @@ with ncpmpcpp is the simplest and best way to access the server).
 ![screenshot](./docs/screenshot-02.png)
 
 - **v1**: vanilla js in /public
-- **v2**: react ts in /client, see [README](./client/README.md) (WIP)
+- **v2**: react ts in /client, see [README](./client/README.md)
+
+## usage (v2)
+
+1. copy the `.env.example` templates to `.env` files [in the project root](./.env.example)
+   AND [in client](./client/.env.example) and do edit them
+2. use `npm start` to compile the server and the client and start them up
+3. or alternatively check the `package.json` in root and in client
 
 ## notes
 
