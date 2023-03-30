@@ -24,3 +24,20 @@
 .spacer {
   flex-grow: 1;
 }
+
+// volume respo
+@media screen and (max-width: 540px) {
+  .volumeGroup {
+    width: 100%;
+
+    button.volume {
+      width: auto;
+      flex-grow: 1;
+      position: relative;
+
+      svg {
+        width: 80%;
+      }
+    }
+  }
+}

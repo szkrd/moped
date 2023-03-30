@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { range } from 'lodash';
 import { FC, useCallback } from 'react';
 import { Heart, Pause, Play, SkipBack, SkipForward, Square, Volume2 } from 'react-feather';
@@ -36,12 +37,12 @@ export const TopControls: FC = () => {
   return (
     <div className={styles.topControls}>
       <ButtonBar>
-        <div className={styles.groupButtons}>
+        <div className={classNames(styles.groupButtons, styles.volumeGroup)}>
           <Button className={styles.wide} onClick={onVolumeClick} disabled={isStatusLoading}>
             <Volume2 />
           </Button>
           {range(11).map((idx) => (
-            <VolumeButton value={idx} volume={status.volume} key={idx} />
+            <VolumeButton value={idx} volume={status.volume} className={styles.volume} key={idx} />
           ))}
         </div>
         <Button

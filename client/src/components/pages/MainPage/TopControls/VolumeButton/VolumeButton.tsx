@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import classNames from 'classnames';
+import { FC } from 'react';
 import { ApiUrl } from '../../../../../modules/api';
 import { ApiButton } from '../../../../common/ApiButton/ApiButton';
 import styles from './VolumeButton.module.scss';
@@ -6,9 +7,10 @@ import styles from './VolumeButton.module.scss';
 interface IVolumeButton {
   volume: number;
   value: number;
+  className?: string;
 }
 
-export const VolumeButton: FC<IVolumeButton> = ({ value, volume }) => {
+export const VolumeButton: FC<IVolumeButton> = ({ value, volume, className }) => {
   const roundedVol = Math.round(volume / 10);
   const svgHeight = 30;
   return (
@@ -17,7 +19,7 @@ export const VolumeButton: FC<IVolumeButton> = ({ value, volume }) => {
       query={{ vol: value * 10 }}
       key={value}
       selected={roundedVol === value}
-      className={styles.volumeButton}
+      className={classNames(styles.volumeButton, className)}
     >
       <label>{roundedVol === value ? value : ''}</label>
       <svg
