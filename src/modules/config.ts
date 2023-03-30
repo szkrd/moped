@@ -16,3 +16,5 @@ export const config = {
     port: parseIntSafe(process.env.MPD_PORT, 6600),
   },
 };
+
+if (config.cors.origin === 'false') config.cors = undefined;

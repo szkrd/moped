@@ -55,7 +55,7 @@ export function request(url: string, options: IRequestOptions = {}) {
   const fetchOptions: RequestInit = {
     // sane defaults from MDN
     method: 'GET',
-    mode: 'cors',
+    mode: 'cors', // "no-cors" means something very different than what you may think...
     cache: 'no-cache',
     credentials: 'same-origin',
     redirect: 'follow',

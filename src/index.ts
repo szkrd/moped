@@ -29,7 +29,7 @@ mpdIdler.addListener(
 
 // fire up express
 const app = express();
-app.use(cors(config.cors));
+if (config.cors) app.use(cors(config.cors));
 app.use(express.json());
 setupRoutes(app);
 
