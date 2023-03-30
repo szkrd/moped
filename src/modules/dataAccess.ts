@@ -22,7 +22,7 @@ async function write(fileName: string, data: any[]) {
   await writeFile(getFileName(fileName), JSON.stringify(data, null, 2), 'utf-8');
 }
 
-async function upsert(fileName: string, item: any, matcherFn: (a: any, b: any) => boolean) {
+async function upsert(fileName: string, item: any, matcherFn?: (a: any, b: any) => boolean) {
   const data = await read(fileName);
   matcherFn = matcherFn ?? ((a: any, b: any) => a.id === (b.id ?? -1));
   const idx = data.findIndex((el: any) => matcherFn(el, item));

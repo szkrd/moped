@@ -13,10 +13,12 @@ export interface IButton {
   selected?: boolean;
   disabled?: boolean;
   dataId?: string | number;
+  type?: 'submit' | 'button' | 'reset';
 }
 
 export const Button: FC<PropsWithChildren<IButton>> = (props) => {
   const { children, url, onClick, selected, disabled, newTab, selectedClassName, dataId } = props;
+  const type = props.type ?? 'button';
   const className = classNames(
     styles.button,
     props.className,
@@ -36,7 +38,7 @@ export const Button: FC<PropsWithChildren<IButton>> = (props) => {
       </Link>
     );
   return (
-    <button className={className} onClick={onClick} disabled={disabled} data-id={dataId}>
+    <button className={className} onClick={onClick} disabled={disabled} data-id={dataId} type={type}>
       {children}
     </button>
   );

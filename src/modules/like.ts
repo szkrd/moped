@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { omit } from 'lodash';
+import { isPlainObject, omit } from 'lodash';
 import { getSongLocation } from '../utils/mpd';
 import { trimCutAll } from '../utils/string';
 import { dataAccess } from './dataAccess';
@@ -8,12 +8,15 @@ import { log } from './log';
 const dbName = 'likes.json';
 const MAX_PAYLOAD_SIZE = 2048;
 
-function normalizeSongData(data: any) {
-  data = omit(trimCutAll(data), ['pos', 'duration', 'id', 'time', 'lastModified', 'liked']);
+function normalizeSongData(data: any, updateOnly = false) {
+  const blacklist = ['pos', 'duration', 'time', 'lastModified', 'liked'];
+  if (!updateOnly) blacklist.push('id');
+  data = omit(trimCutAll(data), blacklist);
   if (JSON.stringify(data).length > MAX_PAYLOAD_SIZE) {
     log.error('[like] Data overflow error!');
     return false;
   }
+  if (updateOnly) return { ...data };
   const ret = {
     ...data,
     location: getSongLocation(data),
@@ -45,6 +48,14 @@ async function addLike(currentSong: any) {
   return true;
 }
 
+async function updateLike(currentSong: any) {
+  if (!isPlainObject(currentSong) || typeof currentSong.id !== 'number') return false;
+  const data = normalizeSongData(currentSong, true);
+  if (!data) return false;
+  await dataAccess.upsert(dbName, data);
+  return true;
+}
+
 async function removeLike(id: number) {
   await dataAccess.deleteById(dbName, id);
 }
@@ -63,6 +74,7 @@ async function getLikedSongs() {
 
 export const like = {
   addLike,
+  updateLike,
   removeLike,
   isLiked,
   getLikedSongs,

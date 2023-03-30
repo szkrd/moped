@@ -6,6 +6,7 @@ export interface IStoredSong extends Omit<ICurrentSongState, 'pos' | 'duration' 
   //  | 'liked' hydration is in progress
   location: string;
   at: string;
+  comment?: string;
 }
 
 export type IPartialStoredSong = Partial<IStoredSong>;

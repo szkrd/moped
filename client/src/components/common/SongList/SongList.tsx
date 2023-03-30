@@ -6,6 +6,7 @@ import { IPartialStoredSong } from '../../../state/favoritesState';
 import { Button } from '../Button/Button';
 import { RadioIcon } from '../RadioIcon/RadioIcon';
 import { SearchButton } from '../SearchButton/SearchButton';
+import { SongComment } from './SongComment/SongComment';
 import styles from './SongList.module.scss';
 import SongObjectValueRenderer from './SongObjectValueRenderer';
 
@@ -14,10 +15,11 @@ interface ISongList {
   className?: string;
   onLikeClick?: (song: IPartialStoredSong) => void;
   onRemoveClick?: (song: IPartialStoredSong) => void;
+  withComments?: boolean;
 }
 
 export const SongList: FC<ISongList> = (props) => {
-  const { songs, onLikeClick, onRemoveClick } = props;
+  const { songs, onLikeClick, onRemoveClick, withComments } = props;
   const [opened, setOpened] = useState<number[]>([]);
   // okay, capturing the id this (old) way is fine and performant/dry
   // we just can't reuse it in a sane way (see `useDatasetCallback` for the problem)
@@ -67,7 +69,7 @@ export const SongList: FC<ISongList> = (props) => {
             <table className={styles.details}>
               <tbody>
                 {/* basically another dumb key-value renderer */}
-                {map(omit(song, ['liked', 'formattedName', 'id']), (value, key) => (
+                {map(omit(song, ['liked', 'formattedName', 'id', 'comment']), (value, key) => (
                   <tr key={key}>
                     <td>
                       <label className={styles.key}>{key}:</label>
@@ -77,6 +79,16 @@ export const SongList: FC<ISongList> = (props) => {
                     </td>
                   </tr>
                 ))}
+                {withComments && song.id !== undefined && (
+                  <tr>
+                    <td>
+                      <label>comment:</label>
+                    </td>
+                    <td>
+                      <SongComment id={song.id} text={song.comment} />
+                    </td>
+                  </tr>
+                )}
                 <tr>
                   <td>
                     <label>search:</label>

@@ -107,9 +107,9 @@ export const apiGetActionPause = () => {
   });
 };
 
-export const apiPostLikeSong = (currentSong: ICurrentSongState | IPartialStoredSong) => {
+export const apiPostLikeSong = (currentSong: ICurrentSongState | IPartialStoredSong, updateOnly = false) => {
   // it's better to get the current song as param, since that's what we see on the UI realtime
-  return apiCall(ApiUrl.Like, { method: 'POST', data: currentSong }).then(() => {
+  return apiCall(ApiUrl.Like, { method: updateOnly ? 'PATCH' : 'POST', data: currentSong }).then(() => {
     return apiGetFavorites();
   });
 };

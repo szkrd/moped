@@ -1,0 +1,12 @@
+.input {
+  width: 100%;
+  background-color: #0001;
+
+  &:focus {
+    width: calc(100vw - 150px);
+    background-color: #fff;
+  }
+}
+.actions {
+  display: flex;
+}

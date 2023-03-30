@@ -8,6 +8,13 @@ function POST_like(app: Express, path: string) {
   });
 }
 
+function PATCH_like(app: Express, path: string) {
+  return app.patch(path, async (req, res) => {
+    await like.updateLike(req.body);
+    res.json({ success: true });
+  });
+}
+
 function DELETE_like(app: Express, path: string) {
   return app.delete(path, async (req, res) => {
     await like.removeLike(req.body.id);
@@ -24,6 +31,7 @@ function GET_likes(app: Express, path: string) {
 
 export const extraLikeRoutes = {
   POST_like,
+  PATCH_like,
   DELETE_like,
   GET_likes,
 };
