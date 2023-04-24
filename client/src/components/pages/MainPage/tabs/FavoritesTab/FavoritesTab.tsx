@@ -14,7 +14,7 @@ export const FavoritesTab: FC = () => {
   const { songs } = favorites;
   return (
     <div className={styles.tabPage}>
-      <SongList songs={songs} onRemoveClick={removeSong} withComments />
+      <SongList songs={songs} onRemoveClick={removeSong} withComments withDownloadedFlag />
     </div>
   );
 };

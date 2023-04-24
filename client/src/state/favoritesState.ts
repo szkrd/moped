@@ -7,6 +7,7 @@ export interface IStoredSong extends Omit<ICurrentSongState, 'pos' | 'duration' 
   location: string;
   at: string;
   comment?: string;
+  downloaded?: boolean;
 }
 
 export type IPartialStoredSong = Partial<IStoredSong>;

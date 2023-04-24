@@ -1,12 +1,13 @@
 import classNames from 'classnames';
 import { map, omit } from 'lodash';
 import { FC, useCallback, useState } from 'react';
-import { Heart, Triangle, X } from 'react-feather';
+import { Heart, Save, Triangle, X } from 'react-feather';
 import { IPartialStoredSong } from '../../../state/favoritesState';
 import { Button } from '../Button/Button';
 import { RadioIcon } from '../RadioIcon/RadioIcon';
 import { SearchButton } from '../SearchButton/SearchButton';
 import { SongComment } from './SongComment/SongComment';
+import { SongDownloadedFlag } from './SongDownloadedFlag/SongDownloadedFlag';
 import styles from './SongList.module.scss';
 import SongObjectValueRenderer from './SongObjectValueRenderer';
 
@@ -16,10 +17,11 @@ interface ISongList {
   onLikeClick?: (song: IPartialStoredSong) => void;
   onRemoveClick?: (song: IPartialStoredSong) => void;
   withComments?: boolean;
+  withDownloadedFlag?: boolean;
 }
 
 export const SongList: FC<ISongList> = (props) => {
-  const { songs, onLikeClick, onRemoveClick, withComments } = props;
+  const { songs, onLikeClick, onRemoveClick, withComments, withDownloadedFlag } = props;
   const [opened, setOpened] = useState<number[]>([]);
   // okay, capturing the id this (old) way is fine and performant/dry
   // we just can't reuse it in a sane way (see `useDatasetCallback` for the problem)
@@ -37,12 +39,17 @@ export const SongList: FC<ISongList> = (props) => {
         <li className={idx % 2 ? styles.odd : styles.even} key={song.id}>
           <h3>
             <span
-              className={classNames(styles.name, styles.songListSongName)}
+              className={classNames(
+                styles.name,
+                styles.songListSongName,
+                song.downloaded ? styles.nameDownloaded : null
+              )}
               data-id={song.id}
               onClick={onDetailsClick}
             >
               <RadioIcon song={song} />
               {song.formattedName}
+              {song.downloaded && <Save />}
             </span>
             <span className={styles.actions}>
               <Button dataId={song.id} onClick={onDetailsClick} selected={opened.includes(song.id ?? -1)}>
@@ -69,7 +76,7 @@ export const SongList: FC<ISongList> = (props) => {
             <table className={styles.details}>
               <tbody>
                 {/* basically another dumb key-value renderer */}
-                {map(omit(song, ['liked', 'formattedName', 'id', 'comment']), (value, key) => (
+                {map(omit(song, ['liked', 'formattedName', 'id', 'comment', 'downloaded']), (value, key) => (
                   <tr key={key}>
                     <td>
                       <label className={styles.key}>{key}:</label>
@@ -86,6 +93,16 @@ export const SongList: FC<ISongList> = (props) => {
                     </td>
                     <td>
                       <SongComment id={song.id} text={song.comment} />
+                    </td>
+                  </tr>
+                )}
+                {withDownloadedFlag && song.id !== undefined && (
+                  <tr>
+                    <td>
+                      <label>downloaded:</label>
+                    </td>
+                    <td>
+                      <SongDownloadedFlag id={song.id} state={song.downloaded === true} />
                     </td>
                   </tr>
                 )}
