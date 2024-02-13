@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { IStoredSong } from '../../../state/favoritesState';
 import asiadreamUrl from './images/asiadream.png';
 import decennialUrl from './images/decennial.png';

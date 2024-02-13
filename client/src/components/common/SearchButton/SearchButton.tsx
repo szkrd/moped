@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, SVGProps } from 'react';
+import { FC, PropsWithChildren, SVGProps } from 'react';
 import { Youtube } from 'react-feather';
 import { Button, IButton } from '../Button/Button';
 

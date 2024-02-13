@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import React, { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Clock } from 'react-feather';
 import styles from './RelativeTime.module.scss';
 

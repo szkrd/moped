@@ -1,5 +1,5 @@
-import EventEmitter from 'events';
-import produce from 'immer';
+import { EventEmitter } from 'events';
+import { produce } from 'immer';
 import { DeepPartial } from '../utils/typescript/deepPartial';
 import { getInitialApiState } from './apiState';
 import { getInitialCurrentSongState } from './currentSongState';

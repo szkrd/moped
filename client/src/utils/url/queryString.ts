@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /**
  * Parses query string into an object using URLSearchParams:
  * `?foo=1&bar=2` -> `{ foo: '1', bar: '2' }`

@@ -3,7 +3,6 @@ import { apiCall, ApiUrl } from '../../../modules/api';
 import { TQueryObject } from '../../../utils/fetch/request';
 import { Button, IButton } from '../Button/Button';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IApiButton extends PropsWithChildren<Omit<IButton, 'onClick'>> {
   /** Unlike with the plain button, this is required; api url without the host prefix. */
   url: ApiUrl;

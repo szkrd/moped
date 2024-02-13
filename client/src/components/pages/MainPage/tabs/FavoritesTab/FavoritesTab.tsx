@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useAppState } from '../../../../../hooks/useAppState';
 import { apiDeleteLikedSong } from '../../../../../modules/api';
 import { IFavoritesState, IPartialStoredSong } from '../../../../../state/favoritesState';

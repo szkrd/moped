@@ -1,5 +1,5 @@
 import { range } from 'lodash';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styles from './LoadIndicator.module.scss';
 import classNames from 'classnames';
 
