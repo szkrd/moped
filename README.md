@@ -18,6 +18,8 @@ with ncpmpcpp is the simplest and best way to access the server).
 
 1. copy the `.env.example` templates to `.env` files [in the project root](./.env.example)
    AND [in client](./client/.env.example) and do edit them
+   - in BOTH the client and server `.env` set the network host and port to the same (eg. `192.168.0.123` and `8080`)
+   - if you are using a firewall, then please open the port you want to listen on (for example `8080`)
 2. use `npm start` to compile the server and the client and start them up
 3. or alternatively check the `package.json` in root and in client
 
