@@ -9,8 +9,6 @@ with ncpmpcpp is the simplest and best way to access the server).
 
 ## ui
 
-![screenshot](./docs/screenshot-02.png)
-
 - **v1**: vanilla js in /public
 - **v2**: react ts in /client, see [README](./client/README.md)
 
@@ -33,3 +31,19 @@ marker.
 
 A REST api will keep the http channel open, until the response is finished
 and is ready to send down the wire, to the client.
+
+---
+
+## screenshots
+
+### v1
+
+![screenshot](./docs/screenshot-01.png)
+
+![screenshot](./docs/screenshot-02.png)
+
+### v2
+
+![screenshot](./docs/screenshot-01b.png)
+
+![screenshot](./docs/screenshot-02b.png)
